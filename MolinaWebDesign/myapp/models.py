@@ -34,6 +34,8 @@ def init_db(app) -> dict[str, Callable]:
         db.session.add(usuario)
         db.session.commit()
 
+    
+
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
 
