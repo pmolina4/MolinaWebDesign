@@ -16,5 +16,25 @@ def init_views(app, db_access: dict[str, Callable]):
     @app.route("/", methods=["GET", "POST"])
     def index():
 
-        return render_template("index.html")
+        return render_template("registro.html")
 
+
+    @app.route("/login", methods=["GET", "POST"])
+    def login():
+            return render_template("index.html")
+
+    @app.route("/create_usuario", methods=["GET", "POST"])
+    def create_usuario():
+        if request.method == "GET":
+            return render_template("login.html")
+
+        if request.method == "POST":
+            create_usuario = db_access["create_usuario"]
+            create_usuario(
+                usuario=request.form["usuario"],
+                correo=request.form["correo"],
+                contrasena=request.form["contrasena"],
+                rol=""
+            )
+            return redirect("/login")
+        
