@@ -49,6 +49,13 @@ def init_db(app) -> dict[str, Callable]:
         toldos = Toldo.query.all()
         return [toldo for toldo in toldos]
     
+    def read_toldo(Toldo_id: int) -> Toldo:
+        return Toldo.query.get(Toldo_id)
+    
+    def delete_toldo(Toldo_id: int):
+        toldo = Toldo.query.get(Toldo_id)
+        db.session.delete(toldo)
+        db.session.commit()
 
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
@@ -57,6 +64,8 @@ def init_db(app) -> dict[str, Callable]:
         # estos alias serán usados para llamar a los métodos de la clase, por ejemplo db_access["create"]
         # invoca al método create_contact
         "create_usuario": create_usuario,
-        "list_toldos": list_toldos
+        "list_toldos": list_toldos,
+        "read_toldo": read_toldo,
+        "delete_toldo": delete_toldo
 
     }

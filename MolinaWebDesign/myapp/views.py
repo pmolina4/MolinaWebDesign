@@ -75,10 +75,25 @@ def init_views(app, db_access: dict[str, Callable]):
             return redirect("/")
 
     # ------------------VIEW DE Toldos-------------------------
-
+    
+    
     @app.route("/toldo", methods=["GET", "POST"])
     def toldo():
 
         list_toldo = db_access["list_toldos"]
         toldos = list_toldo()
         return render_template("toldos.html", toldos=toldos)
+    
+    @app.route("/delete_toldo/<int:Toldo_id>", methods=["GET", "POST"])
+    def delete_toldo(Toldo_id: int):
+        if request.method == "GET":
+            read_toldo = db_access["read_toldo"]
+            toldo = read_toldo(Toldo_id)
+            return render_template("delete_toldo.html", toldo=toldo)
+
+        if request.method == "POST":
+            delete_toldo= db_access["delete_toldo"]
+            delete_toldo(
+                Toldo_id=Toldo_id
+            )
+            return redirect("/toldo")
