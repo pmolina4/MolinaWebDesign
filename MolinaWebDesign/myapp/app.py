@@ -3,7 +3,7 @@ from flask import Flask
 # método que crea la aplicación (es llamadao en server.py)
 def create_app():
     app = Flask(__name__) # para crear una aplicación tipo Flask
-    
+    app.secret_key = "abcd1234"
     # declarar qué archivo SQLite se conectará a la aplicación creada con Flask
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///persianas_molina.sqlite3"
 

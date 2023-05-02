@@ -1,7 +1,7 @@
 import hashlib
 from typing import Callable
 
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, session, url_for
 
 # init_views inicializa la clase de las vistas
 # app es un objeto flask creado en app.py (en app.py: app = Flask(__name__)
@@ -13,7 +13,6 @@ from flask import redirect, render_template, request
 
 # ------------------FUNCION DE HASH DE LA PASSWORD-------------------------
 
-
 def hash_password(password: str) -> str:
     salt = "mysecretsalt"  # puedes usar un valor diferente aquí
     return hashlib.sha256((password + salt).encode()).hexdigest()
@@ -24,18 +23,39 @@ def init_views(app, db_access: dict[str, Callable]):
     # definición de las acciones a realizar para lanzar cada vista
     # nótese que el código de "/" no pregunta si se ha hecho una petición, así que deberá ejecutarse al inicializar
     # en el caso de los demás tienen sentencias IF para que el código se ejecute solo si haya una petición
-
+# ------------------VIEW DE LOGIN-------------------------
     @app.route("/", methods=["GET", "POST"])
-    def index():
-
-        return render_template("login.html")
-
-    # ------------------VIEW DE LOGIN-------------------------
-
-    @app.route("/login", methods=["GET", "POST"])
     def login():
+        if request.method == "GET":
+            return render_template("login.html")
+        
+        if request.method == "POST":
+            usuario = request.form["usuario"]
+            contrasena = request.form["contrasena"]
+            session['usuario'] = usuario
+            return redirect(url_for('inicio'))
+        
+    # ------------------Cerrar Sesion------------------------
+    @app.route("/logout", methods=["GET", "POST"])
+    def logout():
+        session.clear()
+        return render_template("login.html")
+    
+    # ------------------VIEW DE Inicio-------------------------
+
+    @app.route("/inicio", methods=["GET", "POST"])
+    def inicio():
         return render_template("index.html")
 
+
+        """
+        # Verificar si el usuario ha iniciado sesión
+        if 'usuario' not in session:
+            return redirect(url_for('login'))
+
+        # Si el usuario ha iniciado sesión, mostrar la vista de inicio
+        return render_template("index.html")
+        """
     # ------------------VIEW DE REGISTRO-------------------------
 
     @app.route("/create_usuario", methods=["GET", "POST"])
@@ -52,27 +72,13 @@ def init_views(app, db_access: dict[str, Callable]):
                 contrasena=contrasena_hash,
                 rol=""
             )
-            return redirect("/login")
+            return redirect("/")
 
-    # ------------------VIEW DE Inicio-------------------------
+    # ------------------VIEW DE Toldos-------------------------
 
-    @app.route("/inicio", methods=["GET", "POST"])
-    def inicio():
-        if request.method == "POST":
-            # Obtener el usuario de la base de datos
-            get_user = db_access["get_user"]
-            user = get_user(usuario=request.form["usuario"])
+    @app.route("/toldo", methods=["GET", "POST"])
+    def toldo():
 
-            # Verificar si el usuario existe y si la contraseña coincide
-            if user and user["contrasena"] == hash_password(request.form["contrasena"]):
-                # Redirigir al usuario a la página correspondiente
-                if user["rol"] == "admin":
-                    return redirect("/admin")
-                else:
-                    return redirect("/usuario")
-            else:
-                # Informar al usuario de que la autenticación ha fallado
-                return render_template("inicio.html", error="Credenciales incorrectas")
-
-    # Si la petición es GET, simplemente renderiza la plantilla
-    return render_template("inicio.html")
+        list_toldo = db_access["list_toldos"]
+        toldos = list_toldo()
+        return render_template("toldos.html", toldos=toldos)

@@ -24,7 +24,17 @@ def init_db(app) -> dict[str, Callable]:
 
         def __str__(self):
             return f"[{self.usuario}] {self.correo} {self.contrasena} {self.rol}"
+        
+    class Toldo(db.Model):
 
+        __tablename__ = "Toldo"  # Nombre de la tabla que se crea
+
+        # declarar campos de la tabla "Equipo"
+        Toldo_id = db.Column("toldo_id", db.Integer, Sequence(
+            'toldo_id_seq'),  primary_key=True)
+        Modelo = db.Column(db.String(20))
+        Tipo = db.Column(db.String(30))
+        Dimensiones = db.Column(db.String(30))
 
    # ------------- FUNCIONES DE USUARIO -----------
     def create_usuario(usuario: str, correo: str, contrasena: str, rol: str):
@@ -34,6 +44,10 @@ def init_db(app) -> dict[str, Callable]:
         db.session.add(usuario)
         db.session.commit()
 
+   # ------------- FUNCIONES DE TOLDOS -----------
+    def list_toldos() -> list[Toldo]:
+        toldos = Toldo.query.all()
+        return [toldo for toldo in toldos]
     
 
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
@@ -42,6 +56,7 @@ def init_db(app) -> dict[str, Callable]:
     return {
         # estos alias serán usados para llamar a los métodos de la clase, por ejemplo db_access["create"]
         # invoca al método create_contact
-        "create_usuario": create_usuario
+        "create_usuario": create_usuario,
+        "list_toldos": list_toldos
 
     }
