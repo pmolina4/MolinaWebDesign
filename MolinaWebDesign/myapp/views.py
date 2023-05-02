@@ -115,3 +115,20 @@ def init_views(app, db_access: dict[str, Callable]):
                 imagen=request.form["imagen"]
             )
             return redirect("/toldo")
+    
+    @app.route("/update_toldo/<int:Toldo_id>", methods=["GET", "POST"])
+    def updtae_toldo(Toldo_id: int):
+        if request.method == "GET":
+            read_toldo = db_access["read_toldo"]
+            toldo = read_toldo(Toldo_id)
+            return render_template("update_toldo.html", toldo=toldo)
+
+        if request.method == "POST":
+            update_toldo = db_access["update_toldo"]
+            update_toldo(
+                Toldo_id = Toldo_id,
+                modelo=request.form["modelo"],
+                tipo=request.form["tipo"],
+                dimensiones=request.form["dimensiones"],
+            )
+            return redirect("/toldo")

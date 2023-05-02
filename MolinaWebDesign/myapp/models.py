@@ -64,6 +64,16 @@ def init_db(app) -> dict[str, Callable]:
         )
         db.session.add(toldo)
         db.session.commit()
+    
+    def update_toldo(
+        Toldo_id: int, modelo: str, tipo: str, dimensiones: str
+    ):
+        toldo = Toldo.query.get(Toldo_id)
+        toldo.Modelo = modelo
+        toldo.Tipo = tipo
+        toldo.Dimensiones = dimensiones
+        toldo.Imagen = toldo.Imagen
+        db.session.commit()
 
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
@@ -75,6 +85,7 @@ def init_db(app) -> dict[str, Callable]:
         "list_toldos": list_toldos,
         "read_toldo": read_toldo,
         "delete_toldo": delete_toldo,
-        "create_toldo": create_toldo
+        "create_toldo": create_toldo,
+        "update_toldo" : update_toldo
 
     }

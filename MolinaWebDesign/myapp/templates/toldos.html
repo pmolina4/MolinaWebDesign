@@ -18,7 +18,7 @@
 
       
     <div class="container my-5">
-        <div style=" overflow:auto;  height: 50vh; border-style: solid;">
+        <div style=" overflow:auto;  height: 70vh; border-style: solid;">
           <table class="table table-bordered mx-auto">
             <thead class="table-dark">
               <tr class="table-active">
@@ -37,7 +37,7 @@
                 <td> {{ toldo.Tipo }} </td>
                 <td> {{ toldo.Dimensiones }} </td>
                 <td> {{ toldo.Imagen }} </td>
-                <td> <a class="btn btn-primary" href="">Update</a></td>
+                <td> <a class="btn btn-primary" href="/update_toldo/{{toldo.Toldo_id}}">Update</a></td>
                 <td> <a class="btn btn-primary" href="/delete_toldo/{{toldo.Toldo_id}}">Delete</a></td>
               </tr>
               {% endfor %}
