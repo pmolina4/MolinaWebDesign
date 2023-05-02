@@ -1,7 +1,7 @@
 import hashlib
 from typing import Callable
 
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, flash
 
 # init_views inicializa la clase de las vistas
 # app es un objeto flask creado en app.py (en app.py: app = Flask(__name__)
@@ -13,6 +13,7 @@ from flask import redirect, render_template, request, session, url_for
 
 # ------------------FUNCION DE HASH DE LA PASSWORD-------------------------
 
+
 def hash_password(password: str) -> str:
     salt = "mysecretsalt"  # puedes usar un valor diferente aquí
     return hashlib.sha256((password + salt).encode()).hexdigest()
@@ -23,38 +24,46 @@ def init_views(app, db_access: dict[str, Callable]):
     # definición de las acciones a realizar para lanzar cada vista
     # nótese que el código de "/" no pregunta si se ha hecho una petición, así que deberá ejecutarse al inicializar
     # en el caso de los demás tienen sentencias IF para que el código se ejecute solo si haya una petición
-# ------------------VIEW DE LOGIN-------------------------
+
+    # ------------------VIEW DE LOGIN-------------------------
     @app.route("/", methods=["GET", "POST"])
     def login():
         if request.method == "GET":
             return render_template("login.html")
-        
+
         if request.method == "POST":
+            find_login = db_access["find_login"]
             usuario = request.form["usuario"]
-            contrasena = request.form["contrasena"]
-            session['usuario'] = usuario
-            return redirect(url_for('inicio'))
-        
+            contrasena = hash_password(request.form["contrasena"])
+            if find_login(usuario, contrasena):
+                # El inicio de sesión es exitoso
+                session['usuario'] = usuario
+                return redirect(url_for('inicio'))
+            else:
+                error_sesion = "Error de inicio de sesion"
+                flash(error_sesion)
+                return render_template("login.html")
+
     # ------------------Cerrar Sesion------------------------
+
     @app.route("/logout", methods=["GET", "POST"])
     def logout():
         session.clear()
         return render_template("login.html")
-    
+
     # ------------------VIEW DE Inicio-------------------------
 
     @app.route("/inicio", methods=["GET", "POST"])
     def inicio():
-    
+
         # Verificar si el usuario ha iniciado sesión
         if 'usuario' in session:
-             usuario = session['usuario'] 
-             usu=usuario
-             return render_template("index.html", usu=usu)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("index.html", usu=usu)
         # Si el usuario ha iniciado sesión, mostrar la vista de inicio
-        else: 
+        else:
             return "No tiene permisos para acceder"
-
 
     # ------------------VIEW DE REGISTRO-------------------------
 
@@ -75,15 +84,14 @@ def init_views(app, db_access: dict[str, Callable]):
             return redirect("/")
 
     # ------------------VIEW DE Toldos-------------------------
-    
-    
+
     @app.route("/toldo", methods=["GET", "POST"])
     def toldo():
 
         list_toldo = db_access["list_toldos"]
         toldos = list_toldo()
         return render_template("toldos.html", toldos=toldos)
-    
+
     @app.route("/delete_toldo/<int:Toldo_id>", methods=["GET", "POST"])
     def delete_toldo(Toldo_id: int):
         if request.method == "GET":
@@ -92,12 +100,12 @@ def init_views(app, db_access: dict[str, Callable]):
             return render_template("delete_toldo.html", toldo=toldo)
 
         if request.method == "POST":
-            delete_toldo= db_access["delete_toldo"]
+            delete_toldo = db_access["delete_toldo"]
             delete_toldo(
                 Toldo_id=Toldo_id
             )
             return redirect("/toldo")
-    
+
     @app.route("/create_toldo", methods=["GET", "POST"])
     def create_toldo():
         if request.method == "GET":
@@ -115,7 +123,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 imagen=request.form["imagen"]
             )
             return redirect("/toldo")
-    
+
     @app.route("/update_toldo/<int:Toldo_id>", methods=["GET", "POST"])
     def updtae_toldo(Toldo_id: int):
         if request.method == "GET":
@@ -126,7 +134,7 @@ def init_views(app, db_access: dict[str, Callable]):
         if request.method == "POST":
             update_toldo = db_access["update_toldo"]
             update_toldo(
-                Toldo_id = Toldo_id,
+                Toldo_id=Toldo_id,
                 modelo=request.form["modelo"],
                 tipo=request.form["tipo"],
                 dimensiones=request.form["dimensiones"],

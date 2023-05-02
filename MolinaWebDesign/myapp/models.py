@@ -45,6 +45,18 @@ def init_db(app) -> dict[str, Callable]:
         db.session.add(usuario)
         db.session.commit()
 
+    def find_login(usuario, contrasena):
+    # Busca un usuario que coincida con el usuario y la contraseña dados
+        usuario_encontrado = Usuario.query.filter_by(
+        Usuario=usuario, Contrasena=contrasena).first()
+        if usuario_encontrado:
+        # Si se encuentra un usuario con este usuario y contraseña, el inicio de sesión es exitoso
+            return True
+        else:
+        # Si no se encuentra un usuario, el inicio de sesión falla
+            return False
+
+
    # ------------- FUNCIONES DE TOLDOS -----------
     def list_toldos() -> list[Toldo]:
         toldos = Toldo.query.all()
@@ -86,6 +98,7 @@ def init_db(app) -> dict[str, Callable]:
         "read_toldo": read_toldo,
         "delete_toldo": delete_toldo,
         "create_toldo": create_toldo,
-        "update_toldo" : update_toldo
+        "update_toldo" : update_toldo,
+        "find_login" : find_login
 
     }
