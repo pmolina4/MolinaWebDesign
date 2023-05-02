@@ -35,6 +35,7 @@ def init_db(app) -> dict[str, Callable]:
         Modelo = db.Column(db.String(20))
         Tipo = db.Column(db.String(30))
         Dimensiones = db.Column(db.String(30))
+        Imagen = db.Column(db.String(30))
 
    # ------------- FUNCIONES DE USUARIO -----------
     def create_usuario(usuario: str, correo: str, contrasena: str, rol: str):
@@ -57,6 +58,13 @@ def init_db(app) -> dict[str, Callable]:
         db.session.delete(toldo)
         db.session.commit()
 
+    def create_toldo(modelo: str, tipo: str, dimensiones: str, imagen: str):
+        toldo = Toldo(
+            Modelo=modelo, Tipo=tipo, Dimensiones=dimensiones, Imagen=imagen
+        )
+        db.session.add(toldo)
+        db.session.commit()
+
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
 
@@ -66,6 +74,7 @@ def init_db(app) -> dict[str, Callable]:
         "create_usuario": create_usuario,
         "list_toldos": list_toldos,
         "read_toldo": read_toldo,
-        "delete_toldo": delete_toldo
+        "delete_toldo": delete_toldo,
+        "create_toldo": create_toldo
 
     }

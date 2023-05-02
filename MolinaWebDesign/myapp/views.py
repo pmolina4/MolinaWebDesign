@@ -97,3 +97,21 @@ def init_views(app, db_access: dict[str, Callable]):
                 Toldo_id=Toldo_id
             )
             return redirect("/toldo")
+    
+    @app.route("/create_toldo", methods=["GET", "POST"])
+    def create_toldo():
+        if request.method == "GET":
+            list_toldo = db_access["list_toldos"]
+            toldos = list_toldo()
+
+            return render_template("create_toldo.html", toldos=toldos)
+
+        if request.method == "POST":
+            create_toldo = db_access["create_toldo"]
+            create_toldo(
+                modelo=request.form["modelo"],
+                tipo=request.form["tipo"],
+                dimensiones=request.form["dimensiones"],
+                imagen=request.form["imagen"]
+            )
+            return redirect("/toldo")
