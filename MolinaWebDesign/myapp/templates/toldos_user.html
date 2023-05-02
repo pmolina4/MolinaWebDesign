@@ -14,9 +14,45 @@
 
 <body>
     <!-----------------------------------NAVBAR------------------------------------------>
-    {% include 'includes/navbar.html' %}
+    {% include 'includes/navbar_user.html' %}
+    <div class="container">
+        <div class="row mt-5">
+            {% for toldo in toldos %}
+            <div class="col-4">
+                <p class="list-group">
+                <h3>Detalles Del Toldo</h3>
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/style/img/{{toldo.Imagen}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{toldo.Modelo}}
+                        </h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                {{toldo.Tipo}}
+                            </li>
+                            <li class="list-group-item">
+                                {{toldo.Dimensiones}}
+                            </li>
+                            <li class="list-group-item">
+                                {{toldo.Imagen}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body mx-auto">
+                        <form method="POST">
+                            <button type="button" class="btn btn-primary" data-bs-target="#form"
+                                data-bs-toggle="collapse">Editar</button>
+                            <a class="btn btn-secondary" href="/toldo">Volver</a>
+                        </form>
+                    </div>
+                </div>
+                </p>
+            </div>
+            {% endfor %}
 
-
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"

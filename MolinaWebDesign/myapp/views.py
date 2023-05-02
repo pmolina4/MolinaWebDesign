@@ -159,6 +159,9 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/toldo_user", methods=["GET", "POST"])
     def toldo_user():
+        list_toldo = db_access["list_toldos"]
+        toldos = list_toldo()
         usuario = session['usuario']
         usu = usuario
-        return render_template("toldos_user.html", usu=usu)
+
+        return render_template("toldos_user.html",toldos=toldos, usu=usu)
