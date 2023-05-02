@@ -45,17 +45,17 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/inicio", methods=["GET", "POST"])
     def inicio():
-        return render_template("index.html")
-
-
-        """
+    
         # Verificar si el usuario ha iniciado sesión
-        if 'usuario' not in session:
-            return redirect(url_for('login'))
-
+        if 'usuario' in session:
+             usuario = session['usuario'] 
+             usu=usuario
+             return render_template("index.html", usu=usu)
         # Si el usuario ha iniciado sesión, mostrar la vista de inicio
-        return render_template("index.html")
-        """
+        else: 
+            return "No tiene permisos para acceder"
+
+
     # ------------------VIEW DE REGISTRO-------------------------
 
     @app.route("/create_usuario", methods=["GET", "POST"])
