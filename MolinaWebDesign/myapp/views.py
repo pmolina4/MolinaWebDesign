@@ -26,6 +26,7 @@ def init_views(app, db_access: dict[str, Callable]):
     # en el caso de los demás tienen sentencias IF para que el código se ejecute solo si haya una petición
 
     # ------------------VIEW DE LOGIN-------------------------
+    #--- Aquí controlo si el usuario que netra es admin o no para así mostrar una serie de cosas u otras
     @app.route("/", methods=["GET", "POST"])
     def login():
         if request.method == "GET":
@@ -33,12 +34,18 @@ def init_views(app, db_access: dict[str, Callable]):
 
         if request.method == "POST":
             find_login = db_access["find_login"]
+            find_admin = db_access["find_admin"]
             usuario = request.form["usuario"]
             contrasena = hash_password(request.form["contrasena"])
-            if find_login(usuario, contrasena):
+
+            if find_admin(usuario, contrasena):
                 # El inicio de sesión es exitoso
                 session['usuario'] = usuario
                 return redirect(url_for('inicio'))
+            elif find_login(usuario, contrasena):
+                # El inicio de sesión es exitoso
+                session['usuario'] = usuario
+                return redirect(url_for('toldo_user'))
             else:
                 error_sesion = "Error de inicio de sesion"
                 flash(error_sesion)
@@ -83,21 +90,25 @@ def init_views(app, db_access: dict[str, Callable]):
             )
             return redirect("/")
 
-    # ------------------VIEW DE Toldos-------------------------
+    # ------------------VIEW DE Toldos ADMIN-------------------------
 
     @app.route("/toldo", methods=["GET", "POST"])
     def toldo():
 
         list_toldo = db_access["list_toldos"]
         toldos = list_toldo()
-        return render_template("toldos.html", toldos=toldos)
+        usuario = session['usuario']
+        usu = usuario
+        return render_template("toldos.html", toldos=toldos, usu=usu)
 
     @app.route("/delete_toldo/<int:Toldo_id>", methods=["GET", "POST"])
     def delete_toldo(Toldo_id: int):
         if request.method == "GET":
             read_toldo = db_access["read_toldo"]
             toldo = read_toldo(Toldo_id)
-            return render_template("delete_toldo.html", toldo=toldo)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("delete_toldo.html", toldo=toldo, usu=usu)
 
         if request.method == "POST":
             delete_toldo = db_access["delete_toldo"]
@@ -111,8 +122,9 @@ def init_views(app, db_access: dict[str, Callable]):
         if request.method == "GET":
             list_toldo = db_access["list_toldos"]
             toldos = list_toldo()
-
-            return render_template("create_toldo.html", toldos=toldos)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("create_toldo.html", toldos=toldos, usu=usu)
 
         if request.method == "POST":
             create_toldo = db_access["create_toldo"]
@@ -129,7 +141,9 @@ def init_views(app, db_access: dict[str, Callable]):
         if request.method == "GET":
             read_toldo = db_access["read_toldo"]
             toldo = read_toldo(Toldo_id)
-            return render_template("update_toldo.html", toldo=toldo)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("update_toldo.html", toldo=toldo, usu=usu)
 
         if request.method == "POST":
             update_toldo = db_access["update_toldo"]
@@ -140,3 +154,11 @@ def init_views(app, db_access: dict[str, Callable]):
                 dimensiones=request.form["dimensiones"],
             )
             return redirect("/toldo")
+
+    # ------------------VIEW DE Toldos USER-------------------------
+
+    @app.route("/toldo_user", methods=["GET", "POST"])
+    def toldo_user():
+        usuario = session['usuario']
+        usu = usuario
+        return render_template("toldos_user.html", usu=usu)
