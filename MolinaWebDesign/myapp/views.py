@@ -178,6 +178,15 @@ def init_views(app, db_access: dict[str, Callable]):
             return render_template("details_toldo.html", toldo=toldo, usu=usu)
 
         if request.method == "POST":
-            
+            usuario = session['usuario']
+            usu = usuario
+            create_presupuestoT = db_access["create_presupuestoT"]
+            create_presupuestoT(
+                ancho=request.form["Ancho"],
+                salida=request.form["Salida"],
+                color=request.form["Color"],
+                tipoLona=request.form["Lona"],
+                usuario=usu
+            )
             return redirect("/toldo_user")
         

@@ -36,6 +36,19 @@ def init_db(app) -> dict[str, Callable]:
         Tipo = db.Column(db.String(30))
         Dimensiones = db.Column(db.String(30))
         Imagen = db.Column(db.String(30))
+    
+    class PresupuestoToldo(db.Model):
+
+        __tablename__ = "PresupuestoToldo"  # Nombre de la tabla que se crea
+
+        # declarar campos de la tabla "Equipo"
+        PresupuestoToldo_id = db.Column("presupuestoToldo_id", db.Integer, Sequence(
+            'presupuestoToldo_id_seq'),  primary_key=True)
+        Ancho = db.Column(db.String(20))
+        Salida = db.Column(db.Integer)
+        Color = db.Column(db.String(30))
+        TipoLona = db.Column(db.String(30))
+        Usu = db.Column(db.String(30))
 
    # ------------- FUNCIONES DE USUARIO -----------
     def create_usuario(usuario: str, correo: str, contrasena: str, rol: str):
@@ -97,6 +110,18 @@ def init_db(app) -> dict[str, Callable]:
         toldo.Imagen = toldo.Imagen
         db.session.commit()
 
+
+
+
+    # ------------- FUNCIONES DE PRESUPUESTOS TOLDOS -----------
+    
+    def create_presupuestoT(ancho: str, salida: int, color: str, tipoLona: str, usuario: str):
+        presupuestoToldo = PresupuestoToldo(
+            Ancho=ancho, Salida= salida, Color=color, TipoLona=tipoLona, Usu=usuario
+        )
+        db.session.add(presupuestoToldo)
+        db.session.commit()
+
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
 
@@ -110,6 +135,7 @@ def init_db(app) -> dict[str, Callable]:
         "create_toldo": create_toldo,
         "update_toldo" : update_toldo,
         "find_login" : find_login,
-        "find_admin" : find_admin
+        "find_admin" : find_admin,
+        "create_presupuestoT" : create_presupuestoT
 
     }
