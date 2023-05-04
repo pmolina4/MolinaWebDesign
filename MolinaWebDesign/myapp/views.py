@@ -165,3 +165,19 @@ def init_views(app, db_access: dict[str, Callable]):
         usu = usuario
 
         return render_template("toldos_user.html",toldos=toldos, usu=usu)
+    
+    # ------------------VIEW DE DETAILS TOLDO-------------------------
+
+    @app.route("/details_toldo/<int:Toldo_id>", methods=["GET", "POST"])
+    def details_toldo(Toldo_id: int):
+        if request.method == "GET":
+            read_toldo = db_access["read_toldo"]
+            toldo = read_toldo(Toldo_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("details_toldo.html", toldo=toldo, usu=usu)
+
+        if request.method == "POST":
+            
+            return redirect("/toldo_user")
+        
