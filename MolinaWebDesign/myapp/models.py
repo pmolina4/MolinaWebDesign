@@ -121,6 +121,17 @@ def init_db(app) -> dict[str, Callable]:
         )
         db.session.add(presupuestoToldo)
         db.session.commit()
+    
+    
+    # ------------- FUNCIONES DE Solicitudes  -----------
+    
+    def list_solicitudes() -> list[PresupuestoToldo]:
+        solicitudes = PresupuestoToldo.query.all()
+        return [solicitud for solicitud in solicitudes]
+    
+    
+    
+    
 
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
@@ -136,6 +147,7 @@ def init_db(app) -> dict[str, Callable]:
         "update_toldo" : update_toldo,
         "find_login" : find_login,
         "find_admin" : find_admin,
-        "create_presupuestoT" : create_presupuestoT
+        "create_presupuestoT" : create_presupuestoT,
+        "list_solicitudes" : list_solicitudes
 
     }

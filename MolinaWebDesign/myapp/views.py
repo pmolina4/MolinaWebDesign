@@ -164,7 +164,7 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
 
-        return render_template("toldos_user.html",toldos=toldos, usu=usu)
+        return render_template("user/toldos_user.html",toldos=toldos, usu=usu)
     
     # ------------------VIEW DE DETAILS TOLDO-------------------------
 
@@ -175,7 +175,7 @@ def init_views(app, db_access: dict[str, Callable]):
             toldo = read_toldo(Toldo_id)
             usuario = session['usuario']
             usu = usuario
-            return render_template("details_toldo.html", toldo=toldo, usu=usu)
+            return render_template("user/details_toldo.html", toldo=toldo, usu=usu)
 
         if request.method == "POST":
             usuario = session['usuario']
@@ -189,4 +189,16 @@ def init_views(app, db_access: dict[str, Callable]):
                 usuario=usu
             )
             return redirect("/toldo_user")
+        
+
+    # ------------------VIEW DE Solicitudes USER-------------------------
+
+    @app.route("/solicitudes", methods=["GET", "POST"])
+    def solicitudes():
+        list_solicitud = db_access["list_solicitudes"]
+        solicitudes = list_solicitud()
+        usuario = session['usuario']
+        usu = usuario
+
+        return render_template("user/solicitudes.html",solicitudes=solicitudes, usu=usu)
         
