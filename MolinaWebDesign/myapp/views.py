@@ -273,9 +273,11 @@ def init_views(app, db_access: dict[str, Callable]):
 
             config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
 
-            output_pdf = str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf'
-
+            output_pdf = 'MolinaWebDesign/myapp/templates/pdf/'+str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf'
+                
             pdfkit.from_string(output_text, output_pdf, configuration=config)
+                # ------------------subir pdf a la bd-------------------------
 
+            
 
             return redirect("/solicitudes_admin")
