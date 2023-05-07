@@ -234,9 +234,14 @@ def init_views(app, db_access: dict[str, Callable]):
             item3 = factura.Color
             item4 = factura.TipoLona
             item5 = factura.Usu
+            Pancho=request.form["Pancho"]
+            Psalida=request.form["Psalida"]
+            Pcolor=request.form["Pcolor"]
+            Plona=request.form["Plona"]
             today_date = datetime.today().strftime("%d/%m/%Y, %H:%M:%S")
 
-            context = {'my_name' : my_name, "item1" : item1, "item2" : item2, "item3" : item3, "item4" : item4, "item5" : item5, "today_date" : today_date}
+            context = {'my_name' : my_name, "item1" : item1, "item2" : item2, "item3" : item3, "item4" : item4, "item5" : item5, "today_date" : today_date, "Pancho" : Pancho, "Psalida" : Psalida,
+                       "Pcolor" : Pcolor, "Plona" : Plona}
 
             template_loader = jinja2.FileSystemLoader('MolinaWebDesign/myapp/templates/pdf')
             template_env = jinja2.Environment(loader=template_loader)
@@ -249,7 +254,7 @@ def init_views(app, db_access: dict[str, Callable]):
 
             config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
 
-            output_pdf = 'pdf_generado.pdf'
+            output_pdf = str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf'
 
             pdfkit.from_string(output_text, output_pdf, configuration=config)
 

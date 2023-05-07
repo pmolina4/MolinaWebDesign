@@ -19,7 +19,7 @@
     <!-- Header Start -->
     <div class="jumbotron jumbotron-fluid bg-jumbotron" style=" background-color: rgba(128, 128, 128, 0.5);">
         <div class="container text-center py-5">
-            <h3 class="text-white display-3 mb-4">Actualizar Toldo</h3>
+            <h3 class="text-white display-3 mb-4">Solicitud Toldo</h3>
             <div class="d-inline-flex align-items-center text-white">
                 <p class="m-0">Crear</p>
                 <i class="far fa-circle px-3"></i>
@@ -39,31 +39,31 @@
                     <img src="../static/style/img/toldo.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">
-                            {{factura.PresupuestoToldo_id}}
+                           ID :  {{factura.PresupuestoToldo_id}}
                         </h5>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                {{factura.Ancho}}
+                               Medidas: {{factura.Ancho}}
                             </li>
                             <li class="list-group-item">
-                                {{factura.Salida}}
+                                Salida: {{factura.Salida}}
                             </li>
                             <li class="list-group-item">
-                                {{factura.Color}}
+                                Color: {{factura.Color}}
                             </li>
                             <li class="list-group-item">
-                                {{factura.TipoLona}}
+                                Lona: {{factura.TipoLona}}
                             </li>
                             <li class="list-group-item">
-                                {{factura.Usu}}
+                                Usuairo: {{factura.Usu}}
                             </li>
                         </ul>
                     </div>
                     <div class="card-body mx-auto">
                         <form method="POST">
                             <button type="button" class="btn btn-primary" data-bs-target="#form"
-                                data-bs-toggle="collapse">Editar</button>
-                            <a class="btn btn-secondary" href="">Volver</a>
+                                data-bs-toggle="collapse">Presupuesto</button>
+                            <a class="btn btn-secondary" href="/inicio">Volver</a>
                         </form>
                     </div>
                 </div>
@@ -73,19 +73,19 @@
             <div class="collapse col-8" id="form">
                 <form action="/create_factura/{{factura.PresupuestoToldo_id}}" id="updateForm" method="POST" enctype="multipart/form-data">
                     <label class="form-label">Precio Ancho</label>
-                    <input type="text" class="form-control" name="Pancho">
+                    <input type="number" class="form-control" name="Pancho">
                     <br>
                     <label class="form-label">Precio Salida</label>
-                    <input type="text" class="form-control" name="Psalida">
+                    <input type="number" class="form-control" name="Psalida">
                     <br>
                     <label class="form-label">Precio Color</label>
-                    <input type="text" class="form-control" name="Pcolor" >
+                    <input type="number" class="form-control" name="Pcolor" >
                     <br>
                     <label class="form-label">Precio Lona</label>
-                    <input type="text" class="form-control" name="Plona" >
+                    <input type="number" class="form-control" name="Plona" >
                     <br>
                     <input type="hidden" name="id" value="">
-                    <button class="btn btn-primary" type="submit">Editar</button>
+                    <button class="btn btn-primary" type="submit">Crear Factura</button>
                     <a class="btn btn-secondary" href="">Volver</a>
                 </form>
             </div>
