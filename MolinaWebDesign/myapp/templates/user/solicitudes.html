@@ -54,7 +54,9 @@
                         <td> {{ solicitud.Color }} </td>
                         <td> {{ solicitud.TipoLona }} </td>
                         <td> {{ solicitud.Usu }} </td>
-                        <td> <a class="btn btn-primary" href="">Delete</a></td>
+                        <form action="/delete_solicitud_user/{{solicitud.PresupuestoToldo_id}}" method="POST" id="deletForm">
+                            <td><input type="submit" value="Delete" class="btn btn-secondary" /></td>
+                        </form>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -63,6 +65,25 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    const form = document.querySelector('#deletForm');
+
+        // Espera a que se envíe el formulario
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Evita que el formulario se envíe de inmediato
+            Swal.fire({
+                title: 'CORRECTO!',
+                text: 'Solicitud Eliminada!!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 3000
+            }).then(function () {
+                form.submit(); // Envía el formulario
+            });
+        });
+
+
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
         crossorigin="anonymous"></script>

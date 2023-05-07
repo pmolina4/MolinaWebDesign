@@ -55,7 +55,7 @@
                         <td> {{ solicitud.Color }} </td>
                         <td> {{ solicitud.TipoLona }} </td>
                         <td> {{ solicitud.Usu }} </td>
-                        <form id="deletForm" action="/delete_solicitud/{{solicitud.PresupuestoToldo_id}}">
+                        <form id="deletForm" action="/delete_solicitud/{{solicitud.PresupuestoToldo_id}}" method="post">
                            <td> <input type="submit" value="Delete" class="btn btn-secondary"/></td>
                         </form>
                         <td> <a class="btn btn-primary"
