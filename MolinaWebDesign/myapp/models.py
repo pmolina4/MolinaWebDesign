@@ -135,7 +135,11 @@ def init_db(app) -> dict[str, Callable]:
     def read_solicitud(PresupuestoToldo_id: int) -> PresupuestoToldo:
         return PresupuestoToldo.query.get(PresupuestoToldo_id)
     
-    
+    def delete_solicitud(PresupuestoToldo_id: int):
+        solicitud = PresupuestoToldo.query.get(PresupuestoToldo_id)
+        db.session.delete(solicitud)
+        db.session.commit()
+
     
     
     
@@ -156,6 +160,7 @@ def init_db(app) -> dict[str, Callable]:
         "find_admin" : find_admin,
         "create_presupuestoT" : create_presupuestoT,
         "list_solicitudes" : list_solicitudes,
-        "read_solicitud" : read_solicitud
+        "read_solicitud" : read_solicitud,
+        "delete_solicitud" : delete_solicitud
 
     }

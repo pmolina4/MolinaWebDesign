@@ -71,18 +71,18 @@
             </div>
 
             <div class="collapse col-8" id="form">
-                <form action="/create_factura/{{factura.PresupuestoToldo_id}}" id="updateForm" method="POST" enctype="multipart/form-data">
+                <form action="/create_factura/{{factura.PresupuestoToldo_id}}" id="createform" method="POST" enctype="multipart/form-data">
                     <label class="form-label">Precio Ancho</label>
-                    <input type="number" class="form-control" name="Pancho">
+                    <input type="number" class="form-control" name="Pancho" id="Pancho_input">
                     <br>
                     <label class="form-label">Precio Salida</label>
-                    <input type="number" class="form-control" name="Psalida">
+                    <input type="number" class="form-control" name="Psalida" id="Psalida_input">
                     <br>
                     <label class="form-label">Precio Color</label>
-                    <input type="number" class="form-control" name="Pcolor" >
+                    <input type="number" class="form-control" name="Pcolor" id="Pcolor_input">
                     <br>
                     <label class="form-label">Precio Lona</label>
-                    <input type="number" class="form-control" name="Plona" >
+                    <input type="number" class="form-control" name="Plona" id="Plona_input">
                     <br>
                     <input type="hidden" name="id" value="">
                     <button class="btn btn-primary" type="submit">Crear Factura</button>
@@ -92,7 +92,79 @@
         </div>
     </div>
 
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const form = document.querySelector('#createform');
+    const Pancho_input = document.querySelector('#Pancho_input');
+    const Psalida_input = document.querySelector('#Psalida_input');
+    const Pcolor_input = document.querySelector('#Pcolor_input');
+    const Plona_input = document.querySelector('#Plona_input');
+
+    function onSubmitClicked(event) {
+      // Detener la acción por defecto del formulario
+      event.preventDefault();
+
+      // Verificar si los valores de entrada son válidos
+      if (Pancho_input.value.trim().length === 0) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Precio Ancho  Requerido',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3000
+        }).then(function () {
+          return false;
+        });
+      }
+      else if (Psalida_input.value.trim().length === 0) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Precio Salida Requerido',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3000
+        }).then(function () {
+          return false;
+        });
+      }
+      else if (Pcolor_input.value.trim().length === 0) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Precio color Requerido',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3000
+        }).then(function () {
+          return false;
+        });
+      }
+      else if (Plona_input.value.trim().length === 0) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Precio lona Requerido',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3000
+        }).then(function () {
+          return false;
+        });
+      }
+      else {
+        Swal.fire({
+          title: 'CORRECTO!',
+          text: 'Factura creada',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 3000
+        }).then(function () {
+          form.submit();
+        });
+      }
+    };
+
+
+    form.onsubmit = onSubmitClicked;
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
         crossorigin="anonymous"></script>

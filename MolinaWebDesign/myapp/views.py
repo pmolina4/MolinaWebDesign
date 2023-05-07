@@ -208,6 +208,15 @@ def init_views(app, db_access: dict[str, Callable]):
 
     # ------------------VIEW DE Solicitudes ADMIN-------------------------
 
+    @app.route("/delete_solicitud/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
+    def delete_solicitud(PresupuestoToldo_id: int):
+        if request.method == "GET":
+            delete_solicitud = db_access["delete_solicitud"]
+            delete_solicitud(
+                PresupuestoToldo_id=PresupuestoToldo_id
+            )
+            return redirect("/solicitudes_admin")
+
     @app.route("/solicitudes_admin", methods=["GET", "POST"])
     def solicitudes_admin():
         list_solicitud = db_access["list_solicitudes"]
