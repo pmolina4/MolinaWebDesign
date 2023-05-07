@@ -3,6 +3,9 @@ from typing import Callable  # para agregar anotaciones a las clases
 from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy import Sequence
+import pdfkit
+import jinja2
+from datetime import datetime
 
 
 def init_db(app) -> dict[str, Callable]:
@@ -129,6 +132,10 @@ def init_db(app) -> dict[str, Callable]:
         solicitudes = PresupuestoToldo.query.all()
         return [solicitud for solicitud in solicitudes]
     
+    def read_solicitud(PresupuestoToldo_id: int) -> PresupuestoToldo:
+        return PresupuestoToldo.query.get(PresupuestoToldo_id)
+    
+    
     
     
     
@@ -148,6 +155,7 @@ def init_db(app) -> dict[str, Callable]:
         "find_login" : find_login,
         "find_admin" : find_admin,
         "create_presupuestoT" : create_presupuestoT,
-        "list_solicitudes" : list_solicitudes
+        "list_solicitudes" : list_solicitudes,
+        "read_solicitud" : read_solicitud
 
     }

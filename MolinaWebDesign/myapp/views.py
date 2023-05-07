@@ -1,6 +1,11 @@
+from datetime import datetime
 import hashlib
+import os
 from typing import Callable
+import jinja2
+import pdfkit
 
+from werkzeug.utils import secure_filename
 from flask import redirect, render_template, request, session, url_for, flash
 
 # init_views inicializa la clase de las vistas
@@ -26,7 +31,7 @@ def init_views(app, db_access: dict[str, Callable]):
     # en el caso de los demás tienen sentencias IF para que el código se ejecute solo si haya una petición
 
     # ------------------VIEW DE LOGIN-------------------------
-    #--- Aquí controlo si el usuario que netra es admin o no para así mostrar una serie de cosas u otras
+    # --- Aquí controlo si el usuario que netra es admin o no para así mostrar una serie de cosas u otras
     @app.route("/", methods=["GET", "POST"])
     def login():
         if request.method == "GET":
@@ -164,8 +169,8 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
 
-        return render_template("user/toldos_user.html",toldos=toldos, usu=usu)
-    
+        return render_template("user/toldos_user.html", toldos=toldos, usu=usu)
+
     # ------------------VIEW DE DETAILS TOLDO-------------------------
 
     @app.route("/details_toldo/<int:Toldo_id>", methods=["GET", "POST"])
@@ -189,7 +194,6 @@ def init_views(app, db_access: dict[str, Callable]):
                 usuario=usu
             )
             return redirect("/toldo_user")
-        
 
     # ------------------VIEW DE Solicitudes USER-------------------------
 
@@ -200,5 +204,54 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
 
-        return render_template("user/solicitudes.html",solicitudes=solicitudes, usu=usu)
-        
+        return render_template("user/solicitudes.html", solicitudes=solicitudes, usu=usu)
+
+    # ------------------VIEW DE Solicitudes ADMIN-------------------------
+
+    @app.route("/solicitudes_admin", methods=["GET", "POST"])
+    def solicitudes_admin():
+        list_solicitud = db_access["list_solicitudes"]
+        solicitudes = list_solicitud()
+        usuario = session['usuario']
+        usu = usuario
+
+        return render_template("solicitudes_admin.html", solicitudes=solicitudes, usu=usu)
+
+    @app.route("/create_factura/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
+    def create_factura(PresupuestoToldo_id: int):
+        if request.method == "GET":
+            read_solicitud = db_access["read_solicitud"]
+            factura = read_solicitud(PresupuestoToldo_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("create_factura.html", factura=factura, usu=usu)
+        if request.method == "POST":
+            read_solicitud = db_access["read_solicitud"]
+            factura = read_solicitud(PresupuestoToldo_id)
+            my_name = factura.PresupuestoToldo_id
+            item1 = factura.Ancho
+            item2 = factura.Salida
+            item3 = factura.Color
+            item4 = factura.TipoLona
+            item5 = factura.Usu
+            today_date = datetime.today().strftime("%d/%m/%Y, %H:%M:%S")
+
+            context = {'my_name' : my_name, "item1" : item1, "item2" : item2, "item3" : item3, "item4" : item4, "item5" : item5, "today_date" : today_date}
+
+            template_loader = jinja2.FileSystemLoader('MolinaWebDesign/myapp/templates/pdf')
+            template_env = jinja2.Environment(loader=template_loader)
+            
+            html_template = 'plantilla.html'
+
+            template = template_env.get_template(html_template)
+
+            output_text = template.render(context)
+
+            config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+
+            output_pdf = 'pdf_generado.pdf'
+
+            pdfkit.from_string(output_text, output_pdf, configuration=config)
+
+
+            return redirect("/solicitudes_admin")
