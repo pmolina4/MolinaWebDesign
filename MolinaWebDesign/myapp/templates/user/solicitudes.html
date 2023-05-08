@@ -54,7 +54,9 @@
                         <td> {{ solicitud.Color }} </td>
                         <td> {{ solicitud.TipoLona }} </td>
                         <td> {{ solicitud.Usu }} </td>
-                        <form action="/delete_solicitud_user/{{solicitud.PresupuestoToldo_id}}" method="POST" id="deletForm">
+                        <td> <a href="/download_pdf" download>Descargar PDF</a></td>
+                        <form action="/delete_solicitud_user/{{solicitud.PresupuestoToldo_id}}" method="POST"
+                            id="deletForm">
                             <td><input type="submit" value="Delete" class="btn btn-secondary" /></td>
                         </form>
                     </tr>
@@ -66,7 +68,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    const form = document.querySelector('#deletForm');
+        const form = document.querySelector('#deletForm');
 
         // Espera a que se envíe el formulario
         form.addEventListener("submit", function (event) {

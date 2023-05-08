@@ -4,9 +4,9 @@ import os
 from typing import Callable
 import jinja2
 import pdfkit
-
+from flask import send_file
 from werkzeug.utils import secure_filename
-from flask import redirect, render_template, request, session, url_for, flash
+from flask import redirect, render_template, request, send_file, session, url_for, flash
 
 # init_views inicializa la clase de las vistas
 # app es un objeto flask creado en app.py (en app.py: app = Flask(__name__)
@@ -73,6 +73,18 @@ def init_views(app, db_access: dict[str, Callable]):
             usuario = session['usuario']
             usu = usuario
             return render_template("index.html", usu=usu)
+        # Si el usuario ha iniciado sesión, mostrar la vista de inicio
+        else:
+            return "No tiene permisos para acceder"
+        
+    @app.route("/inicio_usu", methods=["GET", "POST"])
+    def inicio_usu():
+
+        # Verificar si el usuario ha iniciado sesión
+        if 'usuario' in session:
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("user/index_usuario.html", usu=usu)
         # Si el usuario ha iniciado sesión, mostrar la vista de inicio
         else:
             return "No tiene permisos para acceder"
@@ -196,6 +208,12 @@ def init_views(app, db_access: dict[str, Callable]):
             return redirect("/toldo_user")
 
     # ------------------VIEW DE Solicitudes USER-------------------------
+
+    @app.route('/download_pdf')
+    def download_pdf():
+        file_path = "MolinaWebDesign/myapp/templates/pdf/pablo.pdf"
+        return send_file(file_path, as_attachment=True)
+
 
     @app.route("/delete_solicitud_user/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud_user(PresupuestoToldo_id: int):
