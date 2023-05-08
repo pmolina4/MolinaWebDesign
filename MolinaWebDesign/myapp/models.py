@@ -132,6 +132,10 @@ def init_db(app) -> dict[str, Callable]:
         solicitudes = PresupuestoToldo.query.all()
         return [solicitud for solicitud in solicitudes]
     
+    def list_solicitudes_filter(Usu: str) -> list[PresupuestoToldo]:
+        solicitudes = PresupuestoToldo.query.filter_by(Usu=Usu).all()
+        return solicitudes
+    
     def read_solicitud(PresupuestoToldo_id: int) -> PresupuestoToldo:
         return PresupuestoToldo.query.get(PresupuestoToldo_id)
     
@@ -161,6 +165,6 @@ def init_db(app) -> dict[str, Callable]:
         "create_presupuestoT" : create_presupuestoT,
         "list_solicitudes" : list_solicitudes,
         "read_solicitud" : read_solicitud,
-        "delete_solicitud" : delete_solicitud
-
+        "delete_solicitud" : delete_solicitud,
+        "list_solicitudes_filter" : list_solicitudes_filter
     }

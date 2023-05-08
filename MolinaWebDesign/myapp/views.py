@@ -209,10 +209,11 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/solicitudes", methods=["GET", "POST"])
     def solicitudes():
-        list_solicitud = db_access["list_solicitudes"]
-        solicitudes = list_solicitud()
         usuario = session['usuario']
         usu = usuario
+        list_solicitud = db_access["list_solicitudes_filter"]
+        solicitudes = list_solicitud(usu)
+        
 
         return render_template("user/solicitudes.html", solicitudes=solicitudes, usu=usu)
 
