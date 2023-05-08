@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Sequence
 import pdfkit
 import jinja2
+import smtplib
 from datetime import datetime
 
 
@@ -143,10 +144,6 @@ def init_db(app) -> dict[str, Callable]:
         solicitud = PresupuestoToldo.query.get(PresupuestoToldo_id)
         db.session.delete(solicitud)
         db.session.commit()
-
-    
-    
-    
 
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()

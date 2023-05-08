@@ -102,17 +102,100 @@
         <div class="row justify-content-center mt-5 pb-5">
             <div class="col-7">
                 <h2 class=" row justify-content-center">¡Contáctanos Ahora!</h2>
-                <input type="text" class="form-control mt-2" placeholder="Nombre">
-                <input type="text" class="form-control mt-2" placeholder="Apellidos">
-                <input type="text" class="form-control mt-2" placeholder="Email">
-                <textarea name="" cols="30" rows="10" class="form-control mt-2" placeholder="Descripcio"></textarea>
-                <button type="button" class="btn btn-success mt-2">Enviar</button>
+                <form action="/inicio_usu" method="post" id="enviarMail" enctype="multipart/form-data">
+                    <input type="text" class="form-control mt-2" placeholder="Nombre" name="nombre" id="nombre_input">
+                    <input type="text" class="form-control mt-2" placeholder="Apellidos" name="apellidos"
+                        id="apellidos_input">
+                    <input type="text" class="form-control mt-2" placeholder="Email" name="email" id="email_input">
+                    <textarea name="descripcion" cols="30" rows="10" class="form-control mt-2"
+                        placeholder="Descripcion"></textarea>
+                    <button type="submit" class="btn btn-success mt-2" id="submitButton">Enviar</button>
+                </form>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
+    <script type="text/javascript">
+        emailjs.init('7M24tPA_whVTMjw8y')
+    </script>
+    <script>
+        const form = document.querySelector('#enviarMail');
+        const nombre = document.querySelector('#nombre_input');
+        const apellidos = document.querySelector('#apellidos_input');
+        const mail = document.querySelector('#email_input');
+        const serviceID = 'default_service';
+        const templateID = 'template_4exae74';
+        const submitButton = document.querySelector('#submitButton');
 
+        function onSubmitClicked(event) {
+            // Detener la acción por defecto del formulario
+            event.preventDefault();
+
+            // Verificar si los valores de entrada son válidos
+            if (nombre.value.trim().length === 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Nombre Requerido',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 3000
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (apellidos.value.trim().length === 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Apellidos Requerido',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 3000
+                }).then(function () {
+                    return false;
+                });
+            } else if (mail.value.trim().length === 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Email Requerido',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 3000
+                }).then(function () {
+                    return false;
+                });
+            } else {
+                emailjs.sendForm(serviceID, templateID, this)
+                    .then(() => {
+                        Swal.fire({
+                            title: 'CORRECTO!',
+                            text: 'Toldo Insertado',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function () {
+                            form.submit();
+                        });
+                    }, (err) => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Email Requerido',
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function () {
+                            return false;
+                        });
+                    });
+            }
+
+        };
+
+        form.onsubmit = onSubmitClicked;
+
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"

@@ -1,6 +1,12 @@
 from datetime import datetime
+from distutils import archive_util
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import hashlib
 import os
+import smtplib
 from typing import Callable
 import jinja2
 import pdfkit
@@ -300,3 +306,4 @@ def init_views(app, db_access: dict[str, Callable]):
             
 
             return redirect("/solicitudes_admin")
+        
