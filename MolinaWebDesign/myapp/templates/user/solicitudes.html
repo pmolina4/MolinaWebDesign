@@ -42,6 +42,8 @@
                         <th>Color</th>
                         <th>Tipo De Lona</th>
                         <th>Usuario</th>
+                        <th>Factura</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -54,7 +56,8 @@
                         <td> {{ solicitud.Color }} </td>
                         <td> {{ solicitud.TipoLona }} </td>
                         <td> {{ solicitud.Usu }} </td>
-                        <td> <a href="/download_pdf" download>Descargar PDF</a></td>
+                        <td><a class="btn btn-primary"
+                            href="/download_pdf_usu/{{solicitud.PresupuestoToldo_id}}">Factura</a></td>
                         <form action="/delete_solicitud_user/{{solicitud.PresupuestoToldo_id}}" method="POST"
                             id="deletForm">
                             <td><input type="submit" value="Delete" class="btn btn-secondary" /></td>

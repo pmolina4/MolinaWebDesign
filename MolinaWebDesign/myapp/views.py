@@ -216,19 +216,21 @@ def init_views(app, db_access: dict[str, Callable]):
 
     # ------------------VIEW DE Solicitudes USER-------------------------
 
-    @app.route('/download_pdf/<int:PresupuestoToldo_id>')
-    def download_pdf(PresupuestoToldo_id: int):
+    
+    @app.route('/download_pdf_usu/<int:PresupuestoToldo_id>')
+    def download_pdf_usu(PresupuestoToldo_id: int):
         read_solicitud = db_access["read_solicitud"]
         factura = read_solicitud(PresupuestoToldo_id)
         pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
-        #FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if os.path.exists(pdf_file_path):
+        factura_creada = os.path.exists(pdf_file_path)
+        if factura_creada:
             return send_file(pdf_file_path, as_attachment=True)
         else:
-        # Mostrar mensaje de alerta
+            # Mostrar mensaje de alerta
             flash('La factura no ha sido creada todavía', 'warning')
-            time.sleep(5)  # Esperar 5 segundos antes de redirigir
-            return redirect('/solicitudes_admin')
+            time.sleep(1)  # Esperar 1 segundos antes de redirigir
+            return redirect('/solicitudes')
+
         
 
 
@@ -253,6 +255,22 @@ def init_views(app, db_access: dict[str, Callable]):
         return render_template("user/solicitudes.html", solicitudes=solicitudes, usu=usu)
 
     # ------------------VIEW DE Solicitudes ADMIN-------------------------
+
+    
+    @app.route('/download_pdf/<int:PresupuestoToldo_id>')
+    def download_pdf(PresupuestoToldo_id: int):
+        read_solicitud = db_access["read_solicitud"]
+        factura = read_solicitud(PresupuestoToldo_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        #FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if os.path.exists(pdf_file_path):
+            return send_file(pdf_file_path, as_attachment=True)
+        else:
+        # Mostrar mensaje de alerta
+            flash('La factura no ha sido creada todavía', 'warning')
+            time.sleep(5)  # Esperar 5 segundos antes de redirigir
+            return redirect('/solicitudes_admin')
+        
 
     @app.route("/delete_solicitud/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud(PresupuestoToldo_id: int):
