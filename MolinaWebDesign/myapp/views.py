@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 import hashlib
 import os
 import smtplib
+import time
 from typing import Callable
 import jinja2
 import pdfkit
@@ -215,10 +216,20 @@ def init_views(app, db_access: dict[str, Callable]):
 
     # ------------------VIEW DE Solicitudes USER-------------------------
 
-    @app.route('/download_pdf')
-    def download_pdf():
-        file_path = "MolinaWebDesign/myapp/templates/pdf/pablo.pdf"
-        return send_file(file_path, as_attachment=True)
+    @app.route('/download_pdf/<int:PresupuestoToldo_id>')
+    def download_pdf(PresupuestoToldo_id: int):
+        read_solicitud = db_access["read_solicitud"]
+        factura = read_solicitud(PresupuestoToldo_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        #FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if os.path.exists(pdf_file_path):
+            return send_file(pdf_file_path, as_attachment=True)
+        else:
+        # Mostrar mensaje de alerta
+            flash('La factura no ha sido creada todavía', 'warning')
+            time.sleep(5)  # Esperar 5 segundos antes de redirigir
+            return redirect('/solicitudes_admin')
+        
 
 
     @app.route("/delete_solicitud_user/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
@@ -259,7 +270,7 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
 
-        return render_template("solicitudes_admin.html", solicitudes=solicitudes, usu=usu)
+        return render_template("solicitudes_admin.html", solicitudes=solicitudes, usu=usu, os=os)
 
     @app.route("/create_factura/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def create_factura(PresupuestoToldo_id: int):
@@ -301,6 +312,9 @@ def init_views(app, db_access: dict[str, Callable]):
             output_pdf = 'MolinaWebDesign/myapp/templates/pdf/'+str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf'
                 
             pdfkit.from_string(output_text, output_pdf, configuration=config)
+            print(output_pdf)
+            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+            return send_file(pdf_file_path, as_attachment=True)
                 # ------------------subir pdf a la bd-------------------------
 
             

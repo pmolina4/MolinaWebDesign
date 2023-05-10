@@ -42,6 +42,7 @@
                         <th>Color</th>
                         <th>Tipo De Lona</th>
                         <th>Usuario</th>
+                        <th>Factura</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -55,8 +56,10 @@
                         <td> {{ solicitud.Color }} </td>
                         <td> {{ solicitud.TipoLona }} </td>
                         <td> {{ solicitud.Usu }} </td>
+                        <td><a class="btn btn-primary"
+                                href="/download_pdf/{{solicitud.PresupuestoToldo_id}}">Factura</a></td>
                         <form id="deletForm" action="/delete_solicitud/{{solicitud.PresupuestoToldo_id}}" method="post">
-                           <td> <input type="submit" value="Delete" class="btn btn-secondary"/></td>
+                            <td> <input type="submit" value="Delete" class="btn btn-secondary" /></td>
                         </form>
                         <td> <a class="btn btn-primary"
                                 href="/create_factura/{{solicitud.PresupuestoToldo_id}}">Factura</a></td>
