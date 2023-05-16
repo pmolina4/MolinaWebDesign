@@ -54,6 +54,18 @@ def init_db(app) -> dict[str, Callable]:
         TipoLona = db.Column(db.String(30))
         Usu = db.Column(db.String(30))
 
+    class Persiana(db.Model):
+
+        __tablename__ = "Persiana"  # Nombre de la tabla que se crea
+
+        # declarar campos de la tabla "Equipo"
+        Persiana_id = db.Column("persiana_id", db.Integer, Sequence(
+            'persiana_id_seq'),  primary_key=True)
+        Modelo = db.Column(db.String(20))
+        Tipo = db.Column(db.String(30))
+        Dimensiones = db.Column(db.String(30))
+        Imagen = db.Column(db.String(30))
+
    # ------------- FUNCIONES DE USUARIO -----------
     def create_usuario(usuario: str, correo: str, contrasena: str, rol: str):
         usuario = Usuario(
@@ -114,6 +126,24 @@ def init_db(app) -> dict[str, Callable]:
         toldo.Imagen = toldo.Imagen
         db.session.commit()
 
+   # ------------- FUNCIONES DE PERSIANA -----------
+    def list_persianas() -> list[Persiana]:
+        persianas = Persiana.query.all()
+        return [persiana for persiana in persianas]
+    
+    def read_persiana(Persiana_id: int) -> Persiana:
+        return Persiana.query.get(Persiana_id)
+    
+
+
+    def create_persiana(modelo: str, tipo: str, dimensiones: str, imagen: str):
+        persiana = Persiana(
+            Modelo=modelo, Tipo=tipo, Dimensiones=dimensiones, Imagen=imagen
+        )
+        db.session.add(persiana)
+        db.session.commit()
+    
+
 
 
 
@@ -163,5 +193,8 @@ def init_db(app) -> dict[str, Callable]:
         "list_solicitudes" : list_solicitudes,
         "read_solicitud" : read_solicitud,
         "delete_solicitud" : delete_solicitud,
-        "list_solicitudes_filter" : list_solicitudes_filter
+        "list_solicitudes_filter" : list_solicitudes_filter,
+        "list_persianas" : list_persianas,
+        "read_persiana" : read_persiana,
+        "create_persiana" : create_persiana
     }

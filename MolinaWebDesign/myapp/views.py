@@ -178,6 +178,38 @@ def init_views(app, db_access: dict[str, Callable]):
                 dimensiones=request.form["dimensiones"],
             )
             return redirect("/toldo")
+        
+    # ------------------VIEW DE Persianas ADMIN-------------------------
+
+    @app.route("/persiana", methods=["GET", "POST"])
+    def persiana():
+
+        list_persiana = db_access["list_persianas"]
+        persianas = list_persiana()
+        usuario = session['usuario']
+        usu = usuario
+        return render_template("persianas.html", persianas=persianas, usu=usu)
+    
+
+    @app.route("/create_persiana", methods=["GET", "POST"])
+    def create_persiana():
+        if request.method == "GET":
+            list_persiana = db_access["list_persianas"]
+            persianas = list_persiana()
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("create_persiana.html", persianas=persianas, usu=usu)
+
+        if request.method == "POST":
+            create_persiana = db_access["create_persiana"]
+            create_persiana(
+                modelo=request.form["modelo"],
+                tipo=request.form["tipo"],
+                dimensiones=request.form["dimensiones"],
+                imagen=request.form["imagen"]
+            )
+            return redirect("/persiana")
+
 
     # ------------------VIEW DE Toldos USER-------------------------
 
@@ -221,7 +253,8 @@ def init_views(app, db_access: dict[str, Callable]):
     def download_pdf_usu(PresupuestoToldo_id: int):
         read_solicitud = db_access["read_solicitud"]
         factura = read_solicitud(PresupuestoToldo_id)
-        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        pdf_file_path = os.path.join('templates', 'pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        #pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
         factura_creada = os.path.exists(pdf_file_path)
         if factura_creada:
             return send_file(pdf_file_path, as_attachment=True)
