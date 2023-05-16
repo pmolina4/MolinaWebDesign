@@ -142,7 +142,22 @@ def init_db(app) -> dict[str, Callable]:
         )
         db.session.add(persiana)
         db.session.commit()
+
+    def delete_persiana(Persiana_id: int):
+        persiana = Persiana.query.get(Persiana_id)
+        db.session.delete(persiana)
+        db.session.commit()    
     
+
+    def update_persiana(
+        Persiana_id: int, modelo: str, tipo: str, dimensiones: str
+    ):
+        persiana = Persiana.query.get(Persiana_id)
+        persiana.Modelo = modelo
+        persiana.Tipo = tipo
+        persiana.Dimensiones = dimensiones
+        persiana.Imagen = persiana.Imagen
+        db.session.commit()
 
 
 
@@ -196,5 +211,7 @@ def init_db(app) -> dict[str, Callable]:
         "list_solicitudes_filter" : list_solicitudes_filter,
         "list_persianas" : list_persianas,
         "read_persiana" : read_persiana,
-        "create_persiana" : create_persiana
+        "create_persiana" : create_persiana,
+        "delete_persiana" : delete_persiana,
+        "update_persiana" : update_persiana
     }

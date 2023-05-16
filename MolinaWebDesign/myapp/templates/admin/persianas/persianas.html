@@ -16,6 +16,18 @@
     <!-----------------------------------NAVBAR------------------------------------------>
     {% include 'includes/navbar.html' %}
 
+    <div class="jumbotron jumbotron-fluid bg-jumbotron" style=" background-color: rgba(128, 128, 128, 0.5);">
+      <div class="container text-center py-5">
+        <h3 class="text-white display-3 mb-4">PERSIANAS</h3>
+        <div class="d-inline-flex align-items-center text-white">
+          <p class="m-0">Molina</p>
+          <i class="far fa-circle px-3"></i>
+          <p class="m-0">Web</p>
+          <i class="far fa-circle px-3"></i>
+          <p class="m-0">Design</p>
+        </div>
+      </div>
+    </div>
       
     <div class="container my-5">
         <div style=" overflow:auto;  height: 70vh; border-style: solid;">
@@ -37,8 +49,8 @@
                 <td> {{ persiana.Tipo }} </td>
                 <td> {{ persiana.Dimensiones }} </td>
                 <td> {{ persiana.Imagen }} </td>
-                <td> <a class="btn btn-primary" href="#">Update</a></td>
-                <td> <a class="btn btn-primary" href="#">Delete</a></td>
+                <td> <a class="btn btn-primary" href="/update_persiana/{{persiana.Persiana_id}}">Update</a></td>
+                <td> <a class="btn btn-primary" href="/delete_persiana/{{persiana.Persiana_id}}">Delete</a></td>
               </tr>
               {% endfor %}
             </tbody>

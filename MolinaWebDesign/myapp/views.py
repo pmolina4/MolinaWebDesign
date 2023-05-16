@@ -178,6 +178,8 @@ def init_views(app, db_access: dict[str, Callable]):
                 dimensiones=request.form["dimensiones"],
             )
             return redirect("/toldo")
+    
+   
         
     # ------------------VIEW DE Persianas ADMIN-------------------------
 
@@ -188,7 +190,7 @@ def init_views(app, db_access: dict[str, Callable]):
         persianas = list_persiana()
         usuario = session['usuario']
         usu = usuario
-        return render_template("persianas.html", persianas=persianas, usu=usu)
+        return render_template("admin/persianas/persianas.html", persianas=persianas, usu=usu)
     
 
     @app.route("/create_persiana", methods=["GET", "POST"])
@@ -198,7 +200,7 @@ def init_views(app, db_access: dict[str, Callable]):
             persianas = list_persiana()
             usuario = session['usuario']
             usu = usuario
-            return render_template("create_persiana.html", persianas=persianas, usu=usu)
+            return render_template("admin/persianas/create_persiana.html", persianas=persianas, usu=usu)
 
         if request.method == "POST":
             create_persiana = db_access["create_persiana"]
@@ -207,6 +209,42 @@ def init_views(app, db_access: dict[str, Callable]):
                 tipo=request.form["tipo"],
                 dimensiones=request.form["dimensiones"],
                 imagen=request.form["imagen"]
+            )
+            return redirect("/persiana")
+        
+    @app.route("/delete_persiana/<int:Persiana_id>", methods=["GET", "POST"])
+    def delete_persiana(Persiana_id: int):
+        if request.method == "GET":
+            read_persiana = db_access["read_persiana"]
+            persiana = read_persiana(Persiana_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("admin/persianas/delete_persiana.html", persiana=persiana, usu=usu)
+
+        if request.method == "POST":
+            delete_persiana = db_access["delete_persiana"]
+            delete_persiana(
+                Persiana_id=Persiana_id
+            )
+            return redirect("/persiana")
+        
+    
+    @app.route("/update_persiana/<int:Persiana_id>", methods=["GET", "POST"])
+    def updtae_persiana(Persiana_id: int):
+        if request.method == "GET":
+            read_persiana = db_access["read_persiana"]
+            persiana = read_persiana(Persiana_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("admin/persianas/update_persiana.html", persiana=persiana, usu=usu)
+
+        if request.method == "POST":
+            update_persiana = db_access["update_persiana"]
+            update_persiana(
+                Persiana_id=Persiana_id,
+                modelo=request.form["modelo"],
+                tipo=request.form["tipo"],
+                dimensiones=request.form["dimensiones"],
             )
             return redirect("/persiana")
 
@@ -253,8 +291,9 @@ def init_views(app, db_access: dict[str, Callable]):
     def download_pdf_usu(PresupuestoToldo_id: int):
         read_solicitud = db_access["read_solicitud"]
         factura = read_solicitud(PresupuestoToldo_id)
-        pdf_file_path = os.path.join('templates', 'pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
-        #pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        #pdf_file_path = os.path.join('\\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        #print(pdf_file_path)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
         factura_creada = os.path.exists(pdf_file_path)
         if factura_creada:
             return send_file(pdf_file_path, as_attachment=True)
