@@ -22,10 +22,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/persiana">Persianas</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/solicitudes_admin">Solicitudes Factura</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="solicitudesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Solicitudes</a>
+                            <ul class="dropdown-menu" aria-labelledby="solicitudesDropdown">
+                                <li><a class="dropdown-item" href="/solicitudes_admin">Toldos</a></li>
+                                <li><a class="dropdown-item" href="/solicitudes_p_admin">Persianas</a></li>
+                                <li><a class="dropdown-item" href="#">Cortinas</a></li>
+                                <!-- Agrega más elementos de dropdown si es necesario -->
+                            </ul>
                         </li>
-                        
                         <li class="nav-item">
                             <a href="/logout" class="nav-link  bg-warning btn" tabindex="-1"
                                 aria-disabled="true">LOGOUT {{usu}}</a>

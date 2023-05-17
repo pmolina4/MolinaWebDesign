@@ -20,9 +20,17 @@
                             <a class="nav-link" href="/toldo_user">Toldos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/solicitudes">Solicitudes</a>
+                            <a class="nav-link" href="/persianas_user">Persianas</a>
                         </li>
-                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="solicitudesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Solicitudes</a>
+                            <ul class="dropdown-menu" aria-labelledby="solicitudesDropdown">
+                                <li><a class="dropdown-item" href="/solicitudes">Toldos</a></li>
+                                <li><a class="dropdown-item" href="/solicitudes_p">Persianas</a></li>
+                                <li><a class="dropdown-item" href="#">Cortinas</a></li>
+                                <!-- Agrega más elementos de dropdown si es necesario -->
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             <a href="/logout" class="nav-link  bg-warning btn" tabindex="-1"
                                 aria-disabled="true">LOGOUT {{usu}}</a>

@@ -54,6 +54,19 @@ def init_db(app) -> dict[str, Callable]:
         TipoLona = db.Column(db.String(30))
         Usu = db.Column(db.String(30))
 
+    class PresupuestoPersiana(db.Model):
+
+        __tablename__ = "PresupuestoPersiana"  # Nombre de la tabla que se crea
+
+        # declarar campos de la tabla "Equipo"
+        PresupuestoPersiana_id = db.Column("presupuestoPersiana_id", db.Integer, Sequence(
+            'presupuestoPersiana_id_seq'),  primary_key=True)
+        Ancho = db.Column(db.String(20))
+        Alto = db.Column(db.Integer)
+        Color = db.Column(db.String(30))
+        TipoLama = db.Column(db.String(30))
+        Usu = db.Column(db.String(30))
+
     class Persiana(db.Model):
 
         __tablename__ = "Persiana"  # Nombre de la tabla que se crea
@@ -170,6 +183,15 @@ def init_db(app) -> dict[str, Callable]:
         )
         db.session.add(presupuestoToldo)
         db.session.commit()
+
+    # ------------- FUNCIONES DE PRESUPUESTOS PERSIANAS -----------
+    
+    def create_presupuestoP(ancho: str, alto: int, color: str, tipoLama: str, usuario: str):
+        Presupuestopersiana = PresupuestoPersiana(
+            Ancho=ancho, Alto= alto, Color=color, TipoLama=tipoLama, Usu=usuario
+        )
+        db.session.add(Presupuestopersiana)
+        db.session.commit()
     
     
     # ------------- FUNCIONES DE Solicitudes  -----------
@@ -187,6 +209,24 @@ def init_db(app) -> dict[str, Callable]:
     
     def delete_solicitud(PresupuestoToldo_id: int):
         solicitud = PresupuestoToldo.query.get(PresupuestoToldo_id)
+        db.session.delete(solicitud)
+        db.session.commit()
+
+    # ------------- FUNCIONES DE Solicitudes  -----------
+    
+    def list_solicitudes_p() -> list[PresupuestoPersiana]:
+        solicitudes_p = PresupuestoPersiana.query.all()
+        return [solicitud for solicitud in solicitudes_p]
+    
+    def list_solicitudesP_filter(Usu: str) -> list[PresupuestoPersiana]:
+        solicitudes = PresupuestoPersiana.query.filter_by(Usu=Usu).all()
+        return solicitudes
+    
+    def read_solicitud_p(PresupuestoPersiana_id: int) -> PresupuestoPersiana:
+        return PresupuestoPersiana.query.get(PresupuestoPersiana_id)
+    
+    def delete_solicitud_p(PresupuestoPersiana_id: int):
+        solicitud = PresupuestoPersiana.query.get(PresupuestoPersiana_id)
         db.session.delete(solicitud)
         db.session.commit()
 
@@ -213,5 +253,10 @@ def init_db(app) -> dict[str, Callable]:
         "read_persiana" : read_persiana,
         "create_persiana" : create_persiana,
         "delete_persiana" : delete_persiana,
-        "update_persiana" : update_persiana
+        "update_persiana" : update_persiana,
+        "create_presupuestoP" : create_presupuestoP,
+        "list_solicitudes_p" : list_solicitudes_p,
+        "list_solicitudesP_filter" : list_solicitudesP_filter,
+        "read_solicitud_p" : read_solicitud_p,
+        "delete_solicitud_p" : delete_solicitud_p
     }
