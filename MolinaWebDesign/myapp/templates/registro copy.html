@@ -7,8 +7,8 @@
 <html>
 
 <head>
-	<title>LOGIN</title>
-	<link rel="stylesheet" href="../static/style/css/loginn.css">
+	<title>Registro</title>
+	<link rel="stylesheet" href="../static/style/css/login.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -18,49 +18,37 @@
 <!--Coded with love by Mutiullah Samim-->
 
 <body>
-	<div class="container h-100">
-		<div class="d-flex justify-content-center h-100">
-			<div class="user_card">
-				<div class="d-flex justify-content-center">
-					<div class="brand_logo_container">
-						<img src="../static/style/img/logo.png"
-							class="brand_logo" alt="Logo">
+	<div class="container">
+		<div class="row">
+			<div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+				<div class="panel border bg-white">
+					<div class="panel-heading">
+						<h3 class="pt-3 font-weight-bold">Registro</h3>
 					</div>
-				</div>
-				<div class="d-flex justify-content-center form_container">
-					<form action="/create_usuario" method="post" id="createUser">
-						<div class="input-group mb-3">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
+					<div class="panel-body p-3">
+						<form action="/create_usuario" method="POST" id="createUser">
+							<div class="form-group py-2">
+								<div class="input-field"> <span class="far fa-user p-2"></span> <input type="text"
+										placeholder="Usuario" name="usuario" id="usuario_input" > </div>
 							</div>
-							<input type="text" name="usuario" id="usuario_input" class="form-control input_user" value=""
-								placeholder="Usuario">
-						</div>
-						<div class="input-group mb-3">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-							<input type="email" name="correo" id="correo_input" class="form-control input_user" value=""
-								placeholder="Correo">
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-							<input type="password" name="contrasena" id="contrasena_input" class="form-control input_pass" value=""
-								placeholder="Contrasena" required>
-						</div>
 
-						<div class="d-flex justify-content-center mt-3 login_container">
-							<button type="submit" name="button" class="btn login_btn">Registrar</button>
-						</div>
-					</form>
-				</div>
+							<div class="form-group py-2">
+								<div class="input-field"> <span class="far fa-user p-2"></span> <input type="text"
+										placeholder="Correo" name="correo" id="correo_input" > </div>
+							</div>
 
-				<div class="mt-4">
-					<div class="d-flex justify-content-center links">
-						Ya tienes cuenta ? <a href="/" class="ml-2">Inciar Sesión</a>
+							<div class="form-group py-1 pb-2">
+								<div class="input-field"> <span class="fas fa-lock px-2"></span> <input type="password"
+										placeholder="Contrasena" name="contrasena"  id="contrasena_input" > </div>
+							</div>
+							
+
+							<button class="btn btn-primary btn-block mt-3">Registrar</button>
+							<div class="text-center pt-4 text-muted">Don't have an account? <a href="/">Sign up</a>
+							</div>
+						</form>
 					</div>
+
 				</div>
 			</div>
 		</div>

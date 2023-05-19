@@ -438,7 +438,7 @@ def init_views(app, db_access: dict[str, Callable]):
             template_loader = jinja2.FileSystemLoader('MolinaWebDesign/myapp/templates/pdf')
             template_env = jinja2.Environment(loader=template_loader)
             
-            html_template = 'plantilla.html'
+            html_template = 'plantilla_persiana.html'
 
             template = template_env.get_template(html_template)
 
