@@ -248,6 +248,15 @@ def init_views(app, db_access: dict[str, Callable]):
             )
             return redirect("/persiana")
 
+# ------------------VIEW DE Persianas ADMIN-------------------------
+
+    @app.route("/cortina", methods=["GET", "POST"])
+    def cortina():
+        list_cortina = db_access["list_cortinas"]
+        cortinas = list_cortina()
+        usuario = session['usuario']
+        usu = usuario
+        return render_template("admin/cortinas/cortinas.html", cortinas=cortinas, usu=usu)
 
     # ------------------VIEW DE Toldos USER-------------------------
 

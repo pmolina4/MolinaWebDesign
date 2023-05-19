@@ -79,6 +79,18 @@ def init_db(app) -> dict[str, Callable]:
         Dimensiones = db.Column(db.String(30))
         Imagen = db.Column(db.String(30))
 
+    class Cortina(db.Model):
+
+        __tablename__ = "Cortina"  # Nombre de la tabla que se crea
+
+        # declarar campos de la tabla "cortina"
+        Cortina_id = db.Column("cortina_id", db.Integer, Sequence(
+            'cortina_id_seq'),  primary_key=True)
+        Tipo = db.Column(db.String(20))
+        Tejido = db.Column(db.String(30))
+        Estilo = db.Column(db.String(30))
+        Imagen = db.Column(db.String(30))
+
    # ------------- FUNCIONES DE USUARIO -----------
     def create_usuario(usuario: str, correo: str, contrasena: str, rol: str):
         usuario = Usuario(
@@ -173,6 +185,13 @@ def init_db(app) -> dict[str, Callable]:
         db.session.commit()
 
 
+# ------------- FUNCIONES DE CORTINAS -----------
+    def list_cortinas() -> list[Cortina]:
+        cortinas = Cortina.query.all()
+        return [cortina for cortina in cortinas]
+    
+    def read_cortina(Cortina_id: int) -> Cortina:
+        return Cortina.query.get(Cortina_id)
 
 
     # ------------- FUNCIONES DE PRESUPUESTOS TOLDOS -----------
@@ -258,5 +277,8 @@ def init_db(app) -> dict[str, Callable]:
         "list_solicitudes_p" : list_solicitudes_p,
         "list_solicitudesP_filter" : list_solicitudesP_filter,
         "read_solicitud_p" : read_solicitud_p,
-        "delete_solicitud_p" : delete_solicitud_p
+        "delete_solicitud_p" : delete_solicitud_p,
+        "list_cortinas" : list_cortinas,
+        "read_cortina" : read_cortina
+
     }
