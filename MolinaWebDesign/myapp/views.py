@@ -272,7 +272,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 imagen=request.form["imagen"]
             )
             return redirect("/cortina")
-        
+
     @app.route("/update_cortina/<int:Cortina_id>", methods=["GET", "POST"])
     def update_cortina(Cortina_id: int):
         if request.method == "GET":
@@ -291,7 +291,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 estilo=request.form["estilo"],
             )
             return redirect("/cortina")
-        
+
     @app.route("/delete_cortina/<int:Cortina_id>", methods=["GET", "POST"])
     def delete_cortina(Cortina_id: int):
         if request.method == "GET":
@@ -329,7 +329,7 @@ def init_views(app, db_access: dict[str, Callable]):
         usu = usuario
 
         return render_template("user/persianas/persianas_user.html", persianas=persianas, usu=usu)
-    
+
     # ------------------VIEW DE CORTINAS USER-------------------------
 
     @app.route("/cortinas_user", methods=["GET", "POST"])
@@ -339,7 +339,6 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
         return render_template("user/cortinas/cortinas_user.html", cortinas=cortinas, usu=usu)
-    
 
     @app.route("/details_cortina/<int:Cortina_id>", methods=["GET", "POST"])
     def details_cortina(Cortina_id: int):
@@ -493,6 +492,95 @@ def init_views(app, db_access: dict[str, Callable]):
 
         return render_template("admin/persianas/solicitudes_p_admin.html", solicitudes=solicitudes, usu=usu, os=os)
 
+       # ------------------VIEW DE Solicitudes Cortinas -------------------------
+
+    @app.route("/solicitudes_c_admin", methods=["GET", "POST"])
+    def solicitudes_c_admin():
+        list_solicitud = db_access["list_solicitudes_c"]
+        solicitudes = list_solicitud()
+        usuario = session['usuario']
+        usu = usuario
+
+        return render_template("admin/cortinas/solicitudes_c_admin.html", solicitudes=solicitudes, usu=usu, os=os)
+
+    @app.route("/delete_c_solicitud_user/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
+    def delete_c_solicitud_user(PresupuestoCortina_id: int):
+        if request.method == "POST":
+            delete_solicitud = db_access["delete_solicitud_c"]
+            delete_solicitud(
+                PresupuestoCortina_id=PresupuestoCortina_id
+            )
+            return redirect("/solicitudes_c")
+
+    @app.route("/create_factura_c/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
+    def create_factura_c(PresupuestoCortina_id: int):
+        if request.method == "GET":
+            read_solicitud = db_access["read_solicitud_c"]
+            factura = read_solicitud(PresupuestoCortina_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("admin/cortinas/create_c_factura.html", factura=factura, usu=usu)
+        if request.method == "POST":
+            read_solicitud = db_access["read_solicitud_c"]
+            factura = read_solicitud(PresupuestoCortina_id)
+            my_name = factura.PresupuestoCortina_id
+            item1 = factura.Ancho
+            item2 = factura.Alto
+            item3 = factura.Tejido
+            item4 = factura.Estilo
+            item5 = factura.Usu
+            Pancho = request.form["Pancho"]
+            Psalida = request.form["Palto"]
+            Pcolor = request.form["Ptejido"]
+            Plona = request.form["Pestilo"]
+            today_date = datetime.today().strftime("%d/%m/%Y, %H:%M:%S")
+
+            context = {'my_name': my_name, "item1": item1, "item2": item2, "item3": item3, "item4": item4, "item5": item5, "today_date": today_date, "Pancho": Pancho, "Psalida": Psalida,
+                       "Pcolor": Pcolor, "Plona": Plona}
+
+            template_loader = jinja2.FileSystemLoader(
+                'MolinaWebDesign/myapp/templates/pdf')
+            template_env = jinja2.Environment(loader=template_loader)
+
+            html_template = 'plantilla_cortina.html'
+
+            template = template_env.get_template(html_template)
+
+            output_text = template.render(context)
+
+            config = pdfkit.configuration(
+                wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+
+            output_pdf = 'MolinaWebDesign/myapp/templates/pdf/cortinas/' + \
+                str(factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf'
+
+            pdfkit.from_string(output_text, output_pdf, configuration=config)
+
+            print(output_pdf)
+            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\cortinas', str(
+                factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+            return send_file(pdf_file_path, as_attachment=True)
+
+        @app.route('/download_c_pdf_usu/<int:PresupuestoCortina_id>')
+        def download_c_pdf_usu(PresupuestoCortina_id: int):
+            read_solicitud = db_access["read_solicitud_c"]
+            factura = read_solicitud(PresupuestoCortina_id)
+            # pdf_file_path = os.path.join('\\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+            # print(pdf_file_path)
+            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\cortinas', str(
+                factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+            factura_creada = os.path.exists(pdf_file_path)
+            if factura_creada:
+                return send_file(pdf_file_path, as_attachment=True)
+            else:
+                # Mostrar mensaje de alerta
+                flash('La factura no ha sido creada todavía', 'warning')
+                time.sleep(1)  # Esperar 1 segundos antes de redirigir
+                return redirect('/solicitudes_c')
+
+
+# ---------------------------------------------------------------
+
     @app.route("/create_factura_p/<int:PresupuestoPersiana_id>", methods=["GET", "POST"])
     def create_factura_p(PresupuestoPersiana_id: int):
         if request.method == "GET":
@@ -558,6 +646,37 @@ def init_views(app, db_access: dict[str, Callable]):
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(5)  # Esperar 5 segundos antes de redirigir
             return redirect('/solicitudes_admin')
+        
+    @app.route('/download_p_pdf/<int:PresupuestoPersiana_id>')
+    def download_p_pdf(PresupuestoPersiana_id: int):
+        read_solicitud = db_access["read_solicitud_p"]
+        factura = read_solicitud(PresupuestoPersiana_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(
+            factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
+        # FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if os.path.exists(pdf_file_path):
+            return send_file(pdf_file_path, as_attachment=True)
+        else:
+            # Mostrar mensaje de alerta
+            flash('La factura no ha sido creada todavía', 'warning')
+            time.sleep(5)  # Esperar 5 segundos antes de redirigir
+            return redirect('/solicitudes_p')
+        
+    @app.route('/download_c_pdf/<int:PresupuestoCortina_id>')
+    def download_c_pdf(PresupuestoCortina_id: int):
+        read_solicitud = db_access["read_solicitud_c"]
+        factura = read_solicitud(PresupuestoCortina_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\cortinas', str(
+            factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+        # FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if os.path.exists(pdf_file_path):
+            return send_file(pdf_file_path, as_attachment=True)
+        else:
+            # Mostrar mensaje de alerta
+            flash('La factura no ha sido creada todavía', 'warning')
+            time.sleep(5)  # Esperar 5 segundos antes de redirigir
+            return redirect('/solicitudes_c')
+    
 
     @app.route("/delete_solicitud/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud(PresupuestoToldo_id: int):
@@ -626,9 +745,7 @@ def init_views(app, db_access: dict[str, Callable]):
             return send_file(pdf_file_path, as_attachment=True)
             # ------------------subir pdf a la bd-------------------------
 
-
     # ------------------VIEW DE Solicitudes USER CORTINA-------------------------
-
 
     @app.route("/solicitudes_c", methods=["GET", "POST"])
     def solicitudes_c():
@@ -638,7 +755,7 @@ def init_views(app, db_access: dict[str, Callable]):
         solicitudes = list_solicitud(usu)
 
         return render_template("user/cortinas/solicitudes_c.html", solicitudes=solicitudes, usu=usu)
-    
+
     @app.route("/delete_solicitudC_user/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
     def delete_solicitudC_user(PresupuestoCortina_id: int):
         if request.method == "POST":
@@ -647,5 +764,3 @@ def init_views(app, db_access: dict[str, Callable]):
                 PresupuestoCortina_id=PresupuestoCortina_id
             )
             return redirect("/solicitudes_c")
-
-   

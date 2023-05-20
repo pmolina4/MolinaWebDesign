@@ -301,6 +301,10 @@ def init_db(app) -> dict[str, Callable]:
         solicitudes_c = PresupuestoCortina.query.all()
         return [solicitud for solicitud in solicitudes_c]
     
+    def read_solicitud_c(PresupuestoCortina_id: int) -> PresupuestoCortina:
+        return PresupuestoCortina.query.get(PresupuestoCortina_id)
+    
+    
     def list_solicitudesC_filter(Usu: str) -> list[PresupuestoCortina]:
         solicitudes = PresupuestoCortina.query.filter_by(Usu=Usu).all()
         return solicitudes
@@ -347,6 +351,7 @@ def init_db(app) -> dict[str, Callable]:
         "create_presupuestoC" : create_presupuestoC,
         "list_solicitudes_c" : list_solicitudes_c,
         "list_solicitudesC_filter" : list_solicitudesC_filter,
-        "delete_solicitud_c" : delete_solicitud_c
+        "delete_solicitud_c" : delete_solicitud_c,
+        "read_solicitud_c" : read_solicitud_c
 
     }
