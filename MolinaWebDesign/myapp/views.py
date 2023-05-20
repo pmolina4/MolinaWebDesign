@@ -83,7 +83,7 @@ def init_views(app, db_access: dict[str, Callable]):
         # Si el usuario ha iniciado sesión, mostrar la vista de inicio
         else:
             return "No tiene permisos para acceder"
-        
+
     @app.route("/inicio_usu", methods=["GET", "POST"])
     def inicio_usu():
 
@@ -178,9 +178,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 dimensiones=request.form["dimensiones"],
             )
             return redirect("/toldo")
-    
-   
-        
+
     # ------------------VIEW DE Persianas ADMIN-------------------------
 
     @app.route("/persiana", methods=["GET", "POST"])
@@ -191,7 +189,6 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
         return render_template("admin/persianas/persianas.html", persianas=persianas, usu=usu)
-    
 
     @app.route("/create_persiana", methods=["GET", "POST"])
     def create_persiana():
@@ -211,7 +208,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 imagen=request.form["imagen"]
             )
             return redirect("/persiana")
-        
+
     @app.route("/delete_persiana/<int:Persiana_id>", methods=["GET", "POST"])
     def delete_persiana(Persiana_id: int):
         if request.method == "GET":
@@ -227,8 +224,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 Persiana_id=Persiana_id
             )
             return redirect("/persiana")
-        
-    
+
     @app.route("/update_persiana/<int:Persiana_id>", methods=["GET", "POST"])
     def updtae_persiana(Persiana_id: int):
         if request.method == "GET":
@@ -248,7 +244,7 @@ def init_views(app, db_access: dict[str, Callable]):
             )
             return redirect("/persiana")
 
-# ------------------VIEW DE Persianas ADMIN-------------------------
+# ------------------VIEW DE Cortinas ADMIN-------------------------
 
     @app.route("/cortina", methods=["GET", "POST"])
     def cortina():
@@ -257,6 +253,25 @@ def init_views(app, db_access: dict[str, Callable]):
         usuario = session['usuario']
         usu = usuario
         return render_template("admin/cortinas/cortinas.html", cortinas=cortinas, usu=usu)
+
+    @app.route("/create_cortina", methods=["GET", "POST"])
+    def create_cortina():
+        if request.method == "GET":
+            list_cortina = db_access["list_cortinas"]
+            cortinas = list_cortina()
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("admin/cortinas/create_cortina.html", cortinas=cortinas, usu=usu)
+
+        if request.method == "POST":
+            create_cortina = db_access["create_cortina"]
+            create_cortina(
+                tipo=request.form["tipo"],
+                tejido=request.form["tejido"],
+                estilo=request.form["estilo"],
+                imagen=request.form["imagen"]
+            )
+            return redirect("/cortina")
 
     # ------------------VIEW DE Toldos USER-------------------------
 
@@ -268,7 +283,7 @@ def init_views(app, db_access: dict[str, Callable]):
         usu = usuario
 
         return render_template("user/toldos_user.html", toldos=toldos, usu=usu)
-   
+
     # ------------------VIEW DE PERSIANAS USER-------------------------
 
     @app.route("/persianas_user", methods=["GET", "POST"])
@@ -329,14 +344,14 @@ def init_views(app, db_access: dict[str, Callable]):
 
     # ------------------VIEW DE Solicitudes USER-------------------------
 
-    
     @app.route('/download_pdf_usu/<int:PresupuestoToldo_id>')
     def download_pdf_usu(PresupuestoToldo_id: int):
         read_solicitud = db_access["read_solicitud"]
         factura = read_solicitud(PresupuestoToldo_id)
-        #pdf_file_path = os.path.join('\\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
-        #print(pdf_file_path)
-        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        # pdf_file_path = os.path.join('\\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        # print(pdf_file_path)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(
+            factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
         factura_creada = os.path.exists(pdf_file_path)
         if factura_creada:
             return send_file(pdf_file_path, as_attachment=True)
@@ -345,11 +360,6 @@ def init_views(app, db_access: dict[str, Callable]):
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(1)  # Esperar 1 segundos antes de redirigir
             return redirect('/solicitudes')
-        
-    
-
-        
-
 
     @app.route("/delete_solicitud_user/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud_user(PresupuestoToldo_id: int):
@@ -360,17 +370,15 @@ def init_views(app, db_access: dict[str, Callable]):
             )
             return redirect("/solicitudes")
 
-
     @app.route("/solicitudes", methods=["GET", "POST"])
     def solicitudes():
         usuario = session['usuario']
         usu = usuario
         list_solicitud = db_access["list_solicitudes_filter"]
         solicitudes = list_solicitud(usu)
-        
 
         return render_template("user/solicitudes.html", solicitudes=solicitudes, usu=usu)
-    
+
    # ------------------VIEW DE Solicitudes Persianas USER-------------------------
 
     @app.route("/solicitudes_p", methods=["GET", "POST"])
@@ -379,10 +387,9 @@ def init_views(app, db_access: dict[str, Callable]):
         usu = usuario
         list_solicitud = db_access["list_solicitudesP_filter"]
         solicitudes = list_solicitud(usu)
-        
 
         return render_template("user/persianas/solicitudes_p.html", solicitudes=solicitudes, usu=usu)
-    
+
     @app.route("/delete_p_solicitud_user/<int:PresupuestoPersiana_id>", methods=["GET", "POST"])
     def delete_p_solicitud_user(PresupuestoPersiana_id: int):
         if request.method == "POST":
@@ -396,9 +403,10 @@ def init_views(app, db_access: dict[str, Callable]):
     def download_p_pdf_usu(PresupuestoPersiana_id: int):
         read_solicitud = db_access["read_solicitud_p"]
         factura = read_solicitud(PresupuestoPersiana_id)
-        #pdf_file_path = os.path.join('\\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
-        #print(pdf_file_path)
-        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
+        # pdf_file_path = os.path.join('\\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        # print(pdf_file_path)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(
+            factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
         factura_creada = os.path.exists(pdf_file_path)
         if factura_creada:
             return send_file(pdf_file_path, as_attachment=True)
@@ -407,7 +415,7 @@ def init_views(app, db_access: dict[str, Callable]):
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(1)  # Esperar 1 segundos antes de redirigir
             return redirect('/solicitudes_p')
-        
+
     @app.route("/solicitudes_p_admin", methods=["GET", "POST"])
     def solicitudes_p_admin():
         list_solicitud = db_access["list_solicitudes_p"]
@@ -416,7 +424,6 @@ def init_views(app, db_access: dict[str, Callable]):
         usu = usuario
 
         return render_template("admin/persianas/solicitudes_p_admin.html", solicitudes=solicitudes, usu=usu, os=os)
-    
 
     @app.route("/create_factura_p/<int:PresupuestoPersiana_id>", methods=["GET", "POST"])
     def create_factura_p(PresupuestoPersiana_id: int):
@@ -435,52 +442,54 @@ def init_views(app, db_access: dict[str, Callable]):
             item3 = factura.Color
             item4 = factura.TipoLama
             item5 = factura.Usu
-            Pancho=request.form["Pancho"]
-            Psalida=request.form["Palto"]
-            Pcolor=request.form["Pcolor"]
-            Plona=request.form["Plama"]
+            Pancho = request.form["Pancho"]
+            Psalida = request.form["Palto"]
+            Pcolor = request.form["Pcolor"]
+            Plona = request.form["Plama"]
             today_date = datetime.today().strftime("%d/%m/%Y, %H:%M:%S")
 
-            context = {'my_name' : my_name, "item1" : item1, "item2" : item2, "item3" : item3, "item4" : item4, "item5" : item5, "today_date" : today_date, "Pancho" : Pancho, "Psalida" : Psalida,
-                       "Pcolor" : Pcolor, "Plona" : Plona}
+            context = {'my_name': my_name, "item1": item1, "item2": item2, "item3": item3, "item4": item4, "item5": item5, "today_date": today_date, "Pancho": Pancho, "Psalida": Psalida,
+                       "Pcolor": Pcolor, "Plona": Plona}
 
-            template_loader = jinja2.FileSystemLoader('MolinaWebDesign/myapp/templates/pdf')
+            template_loader = jinja2.FileSystemLoader(
+                'MolinaWebDesign/myapp/templates/pdf')
             template_env = jinja2.Environment(loader=template_loader)
-            
+
             html_template = 'plantilla_persiana.html'
 
             template = template_env.get_template(html_template)
 
             output_text = template.render(context)
 
-            config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+            config = pdfkit.configuration(
+                wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
 
-            output_pdf = 'MolinaWebDesign/myapp/templates/pdf/persianas/'+str(factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf'
-                
+            output_pdf = 'MolinaWebDesign/myapp/templates/pdf/persianas/' + \
+                str(factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf'
+
             pdfkit.from_string(output_text, output_pdf, configuration=config)
 
             print(output_pdf)
-            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
+            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(
+                factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
             return send_file(pdf_file_path, as_attachment=True)
-
 
     # ------------------VIEW DE Solicitudes ADMIN-------------------------
 
-    
     @app.route('/download_pdf/<int:PresupuestoToldo_id>')
     def download_pdf(PresupuestoToldo_id: int):
         read_solicitud = db_access["read_solicitud"]
         factura = read_solicitud(PresupuestoToldo_id)
-        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
-        #FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(
+            factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        # FALTA COMRPOBAR SI EL PDF ESTÁ GENRADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if os.path.exists(pdf_file_path):
             return send_file(pdf_file_path, as_attachment=True)
         else:
-        # Mostrar mensaje de alerta
+            # Mostrar mensaje de alerta
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(5)  # Esperar 5 segundos antes de redirigir
             return redirect('/solicitudes_admin')
-        
 
     @app.route("/delete_solicitud/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud(PresupuestoToldo_id: int):
@@ -517,34 +526,34 @@ def init_views(app, db_access: dict[str, Callable]):
             item3 = factura.Color
             item4 = factura.TipoLona
             item5 = factura.Usu
-            Pancho=request.form["Pancho"]
-            Psalida=request.form["Psalida"]
-            Pcolor=request.form["Pcolor"]
-            Plona=request.form["Plona"]
+            Pancho = request.form["Pancho"]
+            Psalida = request.form["Psalida"]
+            Pcolor = request.form["Pcolor"]
+            Plona = request.form["Plona"]
             today_date = datetime.today().strftime("%d/%m/%Y, %H:%M:%S")
 
-            context = {'my_name' : my_name, "item1" : item1, "item2" : item2, "item3" : item3, "item4" : item4, "item5" : item5, "today_date" : today_date, "Pancho" : Pancho, "Psalida" : Psalida,
-                       "Pcolor" : Pcolor, "Plona" : Plona}
+            context = {'my_name': my_name, "item1": item1, "item2": item2, "item3": item3, "item4": item4, "item5": item5, "today_date": today_date, "Pancho": Pancho, "Psalida": Psalida,
+                       "Pcolor": Pcolor, "Plona": Plona}
 
-            template_loader = jinja2.FileSystemLoader('MolinaWebDesign/myapp/templates/pdf')
+            template_loader = jinja2.FileSystemLoader(
+                'MolinaWebDesign/myapp/templates/pdf')
             template_env = jinja2.Environment(loader=template_loader)
-            
+
             html_template = 'plantilla.html'
 
             template = template_env.get_template(html_template)
 
             output_text = template.render(context)
 
-            config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+            config = pdfkit.configuration(
+                wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
 
-            output_pdf = 'MolinaWebDesign/myapp/templates/pdf/'+str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf'
-                
+            output_pdf = 'MolinaWebDesign/myapp/templates/pdf/' + \
+                str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf'
+
             pdfkit.from_string(output_text, output_pdf, configuration=config)
             print(output_pdf)
-            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+            pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(
+                factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
             return send_file(pdf_file_path, as_attachment=True)
-                # ------------------subir pdf a la bd-------------------------
-
-            
-
-        
+            # ------------------subir pdf a la bd-------------------------

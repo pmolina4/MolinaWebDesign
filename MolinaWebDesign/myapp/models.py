@@ -186,12 +186,20 @@ def init_db(app) -> dict[str, Callable]:
 
 
 # ------------- FUNCIONES DE CORTINAS -----------
+
     def list_cortinas() -> list[Cortina]:
         cortinas = Cortina.query.all()
         return [cortina for cortina in cortinas]
     
     def read_cortina(Cortina_id: int) -> Cortina:
         return Cortina.query.get(Cortina_id)
+    
+    def create_cortina(tipo: str, tejido: str, estilo: str, imagen: str):
+        cortina = Cortina(
+            Tipo=tipo, Tejido=tejido, Estilo=estilo, Imagen=imagen
+        )
+        db.session.add(cortina)
+        db.session.commit()
 
 
     # ------------- FUNCIONES DE PRESUPUESTOS TOLDOS -----------
@@ -279,6 +287,7 @@ def init_db(app) -> dict[str, Callable]:
         "read_solicitud_p" : read_solicitud_p,
         "delete_solicitud_p" : delete_solicitud_p,
         "list_cortinas" : list_cortinas,
-        "read_cortina" : read_cortina
+        "read_cortina" : read_cortina,
+        "create_cortina" : create_cortina
 
     }
