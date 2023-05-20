@@ -625,3 +625,27 @@ def init_views(app, db_access: dict[str, Callable]):
                 factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
             return send_file(pdf_file_path, as_attachment=True)
             # ------------------subir pdf a la bd-------------------------
+
+
+    # ------------------VIEW DE Solicitudes USER CORTINA-------------------------
+
+
+    @app.route("/solicitudes_c", methods=["GET", "POST"])
+    def solicitudes_c():
+        usuario = session['usuario']
+        usu = usuario
+        list_solicitud = db_access["list_solicitudesC_filter"]
+        solicitudes = list_solicitud(usu)
+
+        return render_template("user/cortinas/solicitudes_c.html", solicitudes=solicitudes, usu=usu)
+    
+    @app.route("/delete_solicitudC_user/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
+    def delete_solicitudC_user(PresupuestoCortina_id: int):
+        if request.method == "POST":
+            delete_solicitud = db_access["delete_solicitud_c"]
+            delete_solicitud(
+                PresupuestoCortina_id=PresupuestoCortina_id
+            )
+            return redirect("/solicitudes_c")
+
+   

@@ -295,6 +295,21 @@ def init_db(app) -> dict[str, Callable]:
         db.session.delete(solicitud)
         db.session.commit()
 
+
+    # ------------- FUNCIONES DE Solicitudes cortina -----------
+    def list_solicitudes_c() -> list[PresupuestoCortina]:
+        solicitudes_c = PresupuestoCortina.query.all()
+        return [solicitud for solicitud in solicitudes_c]
+    
+    def list_solicitudesC_filter(Usu: str) -> list[PresupuestoCortina]:
+        solicitudes = PresupuestoCortina.query.filter_by(Usu=Usu).all()
+        return solicitudes
+
+    def delete_solicitud_c(PresupuestoCortina_id: int):
+        solicitud = PresupuestoCortina.query.get(PresupuestoCortina_id)
+        db.session.delete(solicitud)
+        db.session.commit()
+
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
 
@@ -329,6 +344,9 @@ def init_db(app) -> dict[str, Callable]:
         "create_cortina" : create_cortina,
         "delete_cortina" : delete_cortina,
         "update_cortina" : update_cortina,
-        "create_presupuestoC" : create_presupuestoC
+        "create_presupuestoC" : create_presupuestoC,
+        "list_solicitudes_c" : list_solicitudes_c,
+        "list_solicitudesC_filter" : list_solicitudesC_filter,
+        "delete_solicitud_c" : delete_solicitud_c
 
     }
