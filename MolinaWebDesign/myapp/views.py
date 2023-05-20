@@ -329,6 +329,39 @@ def init_views(app, db_access: dict[str, Callable]):
         usu = usuario
 
         return render_template("user/persianas/persianas_user.html", persianas=persianas, usu=usu)
+    
+    # ------------------VIEW DE CORTINAS USER-------------------------
+
+    @app.route("/cortinas_user", methods=["GET", "POST"])
+    def cortinas_user():
+        list_cortina = db_access["list_cortinas"]
+        cortinas = list_cortina()
+        usuario = session['usuario']
+        usu = usuario
+        return render_template("user/cortinas/cortinas_user.html", cortinas=cortinas, usu=usu)
+    
+
+    @app.route("/details_cortina/<int:Cortina_id>", methods=["GET", "POST"])
+    def details_cortina(Cortina_id: int):
+        if request.method == "GET":
+            read_cortina = db_access["read_cortina"]
+            cortina = read_cortina(Cortina_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("user/cortinas/details_cortina.html", cortina=cortina, usu=usu)
+
+        if request.method == "POST":
+            usuario = session['usuario']
+            usu = usuario
+            create_presupuestoC = db_access["create_presupuestoC"]
+            create_presupuestoC(
+                ancho=request.form["Ancho"],
+                alto=request.form["Alto"],
+                tejido=request.form["tejido"],
+                estilo=request.form["estilo"],
+                usuario=usu
+            )
+            return redirect("/cortinas_user")
 
     # ------------------VIEW DE DETAILS TOLDO-------------------------
 

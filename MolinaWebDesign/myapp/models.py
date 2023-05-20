@@ -66,6 +66,19 @@ def init_db(app) -> dict[str, Callable]:
         Color = db.Column(db.String(30))
         TipoLama = db.Column(db.String(30))
         Usu = db.Column(db.String(30))
+    
+    class PresupuestoCortina(db.Model):
+
+        __tablename__ = "PresupuestoCortina"  # Nombre de la tabla que se crea
+
+        # declarar campos de la tabla "Equipo"
+        PresupuestoCortina_id = db.Column("presupuestoCortina_id", db.Integer, Sequence(
+            'presupuestoCortina_id_seq'),  primary_key=True)
+        Ancho = db.Column(db.String(20))
+        Alto = db.Column(db.Integer)
+        Tejido = db.Column(db.String(30))
+        Estilo = db.Column(db.String(30))
+        Usu = db.Column(db.String(30))
 
     class Persiana(db.Model):
 
@@ -235,6 +248,15 @@ def init_db(app) -> dict[str, Callable]:
         )
         db.session.add(Presupuestopersiana)
         db.session.commit()
+
+    # ------------- FUNCIONES DE PRESUPUESTOS CORTINAS -----------
+    
+    def create_presupuestoC(ancho: str, alto: int, tejido: str, estilo: str, usuario: str):
+        Presupuestocortina = PresupuestoCortina(
+            Ancho=ancho, Alto= alto, Tejido=tejido, Estilo=estilo, Usu=usuario
+        )
+        db.session.add(Presupuestocortina)
+        db.session.commit()
     
     
     # ------------- FUNCIONES DE Solicitudes  -----------
@@ -306,6 +328,7 @@ def init_db(app) -> dict[str, Callable]:
         "read_cortina" : read_cortina,
         "create_cortina" : create_cortina,
         "delete_cortina" : delete_cortina,
-        "update_cortina" : update_cortina
+        "update_cortina" : update_cortina,
+        "create_presupuestoC" : create_presupuestoC
 
     }
