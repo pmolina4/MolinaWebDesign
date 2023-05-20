@@ -49,8 +49,8 @@
                 <td> {{ cortina.Tejido }} </td>
                 <td> {{ cortina.Estilo }} </td>
                 <td> {{ cortina.Imagen }} </td>
-                <td> <a class="btn btn-primary" href="#">Update</a></td>
-                <td> <a class="btn btn-primary" href="#">Delete</a></td>
+                <td> <a class="btn btn-primary" href="/update_cortina/{{cortina.Cortina_id}}">Update</a></td>
+                <td> <a class="btn btn-primary" href="/delete_cortina/{{cortina.Cortina_id}}">Delete</a></td>
               </tr>
               {% endfor %}
             </tbody>

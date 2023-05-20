@@ -272,6 +272,41 @@ def init_views(app, db_access: dict[str, Callable]):
                 imagen=request.form["imagen"]
             )
             return redirect("/cortina")
+        
+    @app.route("/update_cortina/<int:Cortina_id>", methods=["GET", "POST"])
+    def update_cortina(Cortina_id: int):
+        if request.method == "GET":
+            read_cortina = db_access["read_cortina"]
+            cortina = read_cortina(Cortina_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("admin/cortinas/update_cortina.html", cortina=cortina, usu=usu)
+
+        if request.method == "POST":
+            update_cortina = db_access["update_cortina"]
+            update_cortina(
+                Cortina_id=Cortina_id,
+                tipo=request.form["tipo"],
+                tejido=request.form["tejido"],
+                estilo=request.form["estilo"],
+            )
+            return redirect("/cortina")
+        
+    @app.route("/delete_cortina/<int:Cortina_id>", methods=["GET", "POST"])
+    def delete_cortina(Cortina_id: int):
+        if request.method == "GET":
+            read_cortina = db_access["read_cortina"]
+            cortina = read_cortina(Cortina_id)
+            usuario = session['usuario']
+            usu = usuario
+            return render_template("admin/cortinas/delete_cortina.html", cortina=cortina, usu=usu)
+
+        if request.method == "POST":
+            delete_cortina = db_access["delete_cortina"]
+            delete_cortina(
+                Cortina_id=Cortina_id
+            )
+            return redirect("/cortina")
 
     # ------------------VIEW DE Toldos USER-------------------------
 
