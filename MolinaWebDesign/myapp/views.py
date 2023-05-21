@@ -430,6 +430,12 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/delete_solicitud_user/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud_user(PresupuestoToldo_id: int):
+        read_solicitud = db_access["read_solicitud"]
+        factura = read_solicitud(PresupuestoToldo_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
         if request.method == "POST":
             delete_solicitud = db_access["delete_solicitud"]
             delete_solicitud(
@@ -459,6 +465,12 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/delete_p_solicitud_user/<int:PresupuestoPersiana_id>", methods=["GET", "POST"])
     def delete_p_solicitud_user(PresupuestoPersiana_id: int):
+        read_solicitud = db_access["read_solicitud_p"]
+        factura = read_solicitud(PresupuestoPersiana_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
         if request.method == "POST":
             delete_solicitud = db_access["delete_solicitud_p"]
             delete_solicitud(
@@ -505,6 +517,12 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/delete_c_solicitud_user/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
     def delete_c_solicitud_user(PresupuestoCortina_id: int):
+        read_solicitud = db_access["read_solicitud_c"]
+        factura = read_solicitud(PresupuestoCortina_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\cortinas', str(factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
         if request.method == "POST":
             delete_solicitud = db_access["delete_solicitud_c"]
             delete_solicitud(
@@ -581,6 +599,7 @@ def init_views(app, db_access: dict[str, Callable]):
 
 # ---------------------------------------------------------------
 
+
     @app.route("/create_factura_p/<int:PresupuestoPersiana_id>", methods=["GET", "POST"])
     def create_factura_p(PresupuestoPersiana_id: int):
         if request.method == "GET":
@@ -646,7 +665,7 @@ def init_views(app, db_access: dict[str, Callable]):
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(5)  # Esperar 5 segundos antes de redirigir
             return redirect('/solicitudes_admin')
-        
+
     @app.route('/download_p_pdf/<int:PresupuestoPersiana_id>')
     def download_p_pdf(PresupuestoPersiana_id: int):
         read_solicitud = db_access["read_solicitud_p"]
@@ -661,7 +680,7 @@ def init_views(app, db_access: dict[str, Callable]):
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(5)  # Esperar 5 segundos antes de redirigir
             return redirect('/solicitudes_p')
-        
+
     @app.route('/download_c_pdf/<int:PresupuestoCortina_id>')
     def download_c_pdf(PresupuestoCortina_id: int):
         read_solicitud = db_access["read_solicitud_c"]
@@ -676,15 +695,23 @@ def init_views(app, db_access: dict[str, Callable]):
             flash('La factura no ha sido creada todavía', 'warning')
             time.sleep(5)  # Esperar 5 segundos antes de redirigir
             return redirect('/solicitudes_c')
-    
 
     @app.route("/delete_solicitud/<int:PresupuestoToldo_id>", methods=["GET", "POST"])
     def delete_solicitud(PresupuestoToldo_id: int):
+        read_solicitud = db_access["read_solicitud"]
+        factura = read_solicitud(PresupuestoToldo_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
+        
         if request.method == "POST":
             delete_solicitud = db_access["delete_solicitud"]
             delete_solicitud(
                 PresupuestoToldo_id=PresupuestoToldo_id
             )
+            
+
             return redirect("/solicitudes_admin")
 
     @app.route("/solicitudes_admin", methods=["GET", "POST"])
@@ -758,6 +785,13 @@ def init_views(app, db_access: dict[str, Callable]):
 
     @app.route("/delete_solicitudC_user/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
     def delete_solicitudC_user(PresupuestoCortina_id: int):
+        read_solicitud = db_access["read_solicitud_c"]
+        factura = read_solicitud(PresupuestoCortina_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\cortinas', str(factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
+
         if request.method == "POST":
             delete_solicitud = db_access["delete_solicitud_c"]
             delete_solicitud(
