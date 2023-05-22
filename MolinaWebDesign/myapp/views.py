@@ -504,7 +504,42 @@ def init_views(app, db_access: dict[str, Callable]):
 
         return render_template("admin/persianas/solicitudes_p_admin.html", solicitudes=solicitudes, usu=usu, os=os)
 
+    @app.route("/delete_solicitud_p/<int:PresupuestoPersiana_id>", methods=["GET", "POST"])
+    def delete_solicitud_p(PresupuestoPersiana_id: int):
+        read_solicitud = db_access["read_solicitud_p"]
+        factura = read_solicitud(PresupuestoPersiana_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\persianas', str(factura.PresupuestoPersiana_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
+        
+        if request.method == "POST":
+            delete_solicitud = db_access["delete_solicitud_p"]
+            delete_solicitud(
+                PresupuestoPersiana_id=PresupuestoPersiana_id
+            )
+            
+
+            return redirect("/solicitudes_p_admin")
        # ------------------VIEW DE Solicitudes Cortinas -------------------------
+
+    @app.route("/delete_solicitud_c/<int:PresupuestoCortina_id>", methods=["GET", "POST"])
+    def delete_solicitud_c(PresupuestoCortina_id: int):
+        read_solicitud = db_access["read_solicitud_c"]
+        factura = read_solicitud(PresupuestoCortina_id)
+        pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf\cortinas', str(factura.PresupuestoCortina_id) + str(factura.Usu) + '.pdf')
+        
+        if os.path.exists(pdf_file_path):
+            os.remove(pdf_file_path)
+        
+        if request.method == "POST":
+            delete_solicitud = db_access["delete_solicitud_c"]
+            delete_solicitud(
+                PresupuestoCortina_id=PresupuestoCortina_id
+            )
+            
+
+            return redirect("/solicitudes_c_admin")
 
     @app.route("/solicitudes_c_admin", methods=["GET", "POST"])
     def solicitudes_c_admin():
@@ -713,6 +748,7 @@ def init_views(app, db_access: dict[str, Callable]):
             
 
             return redirect("/solicitudes_admin")
+    
 
     @app.route("/solicitudes_admin", methods=["GET", "POST"])
     def solicitudes_admin():
