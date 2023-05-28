@@ -43,6 +43,13 @@
 							<input type="email" name="correo" id="correo_input" class="form-control input_user" value=""
 								placeholder="Correo">
 						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<input type="tel" name="telefono" id="telefono_input" class="form-control input_user" value=""
+								placeholder="Teléfono">
+						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
@@ -69,6 +76,7 @@
 	<script>
 		const form = document.querySelector('#createUser');
 		const usuario_input = document.querySelector('#usuario_input');
+		const telefono_input = document.querySelector('#telefono_input');
 		const correo_input = document.querySelector('#correo_input');
 		const contrasena_input = document.querySelector('#contrasena_input');
 	
@@ -103,6 +111,17 @@
 			Swal.fire({
 			  title: 'Error!',
 			  text: 'Contrasena Requeridas',
+			  icon: 'error',
+			  showConfirmButton: false,
+			  timer: 3000
+			}).then(function () {
+			  return false;
+			});
+		  }
+		  else if (telefono_input.value.trim().length === 0) {
+			Swal.fire({
+			  title: 'Error!',
+			  text: 'Telefono Requeridas',
 			  icon: 'error',
 			  showConfirmButton: false,
 			  timer: 3000

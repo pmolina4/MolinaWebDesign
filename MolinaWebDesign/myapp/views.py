@@ -14,6 +14,8 @@ import pdfkit
 from flask import send_file
 from werkzeug.utils import secure_filename
 from flask import redirect, render_template, request, send_file, session, url_for, flash
+import pyautogui, webbrowser
+from time import sleep
 
 # init_views inicializa la clase de las vistas
 # app es un objeto flask creado en app.py (en app.py: app = Flask(__name__)
@@ -110,6 +112,7 @@ def init_views(app, db_access: dict[str, Callable]):
                 usuario=request.form["usuario"],
                 correo=request.form["correo"],
                 contrasena=contrasena_hash,
+                telefono=request.form["telefono"],
                 rol=""
             )
             return redirect("/")
@@ -804,7 +807,8 @@ def init_views(app, db_access: dict[str, Callable]):
             pdfkit.from_string(output_text, output_pdf, configuration=config)
             print(output_pdf)
             pdf_file_path = os.path.join(r'C:\xampp\htdocs\MolinaWebDesign\MolinaWebDesign\myapp\templates\pdf', str(
-                factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')
+                factura.PresupuestoToldo_id) + str(factura.Usu) + '.pdf')       
+
             return send_file(pdf_file_path, as_attachment=True)
             # ------------------subir pdf a la bd-------------------------
 

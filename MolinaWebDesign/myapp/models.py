@@ -24,6 +24,7 @@ def init_db(app) -> dict[str, Callable]:
         Usuario = db.Column(db.String(20))
         Correo = db.Column(db.String(50))
         Contrasena = db.Column(db.String(50))
+        Telefono = db.Column(db.Integer)
         Rol = db.Column(db.String(10))
 
         def __str__(self):
@@ -105,9 +106,9 @@ def init_db(app) -> dict[str, Callable]:
         Imagen = db.Column(db.String(30))
 
    # ------------- FUNCIONES DE USUARIO -----------
-    def create_usuario(usuario: str, correo: str, contrasena: str, rol: str):
+    def create_usuario(usuario: str, correo: str, contrasena: str,telefono: int, rol: str):
         usuario = Usuario(
-            Usuario=usuario, Correo=correo, Contrasena=contrasena, Rol=rol
+            Usuario=usuario, Correo=correo, Contrasena=contrasena, Telefono=telefono, Rol=rol
         )
         db.session.add(usuario)
         db.session.commit()
@@ -314,6 +315,10 @@ def init_db(app) -> dict[str, Callable]:
         db.session.delete(solicitud)
         db.session.commit()
 
+
+    def list_usu(Usu: str) -> list[Usuario]:
+        usuario = Usuario.query.filter_by(Usuario=Usu).all()
+        return usuario
     # create_all es un método de Flask-alchemy que crea la tabla con sus campos
     db.create_all()
 
@@ -352,6 +357,7 @@ def init_db(app) -> dict[str, Callable]:
         "list_solicitudes_c" : list_solicitudes_c,
         "list_solicitudesC_filter" : list_solicitudesC_filter,
         "delete_solicitud_c" : delete_solicitud_c,
-        "read_solicitud_c" : read_solicitud_c
+        "read_solicitud_c" : read_solicitud_c,
+        "list_usu" : list_usu
 
     }
